@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div class="row">
+	<div class="col-md-2">
+	  <!--Sidebar content-->
+
+	  Search: <input ng-model="query">
+	  Sort by:
+	  <select ng-model="orderProp">
+		<option value="pointsTot">Punteggio</option>
+		<option value="winTot">Vittorie</option>
+		<option value="moneyTot">Montepremi</option>
+		<option value="moneyProfit">Profitti</option>
+		<option value="pointsAvg">Media punti</option>
+		<option value="moneyAvg">Media profitti</option>
+		<option value="payTot">Quote</option>
+		<option value="matchTot">Numero tornei</option>
+	  </select>
+
+	</div>
+	<div class="col-md-10">
+	  <!--Body content-->
+
+	  <ul class="phones">
+		<li ng-repeat="stat in stats | filter:query | orderBy:orderProp:true" class="thumbnail phone-listing">
+		  <a href="#/stats/{{stat._id}}" class="thumb"><img ng-src="resources/players/{{stat._id}}.jpg"></a>
+		  <a href="#/stats/{{stat._id}}">{{stat._id}}</a>
+		  <p>Punteggio={{stat.pointsTot}}</p>
+		  <p>Vittorie={{stat.winTot}}</p>
+		  <p>Montepremi={{stat.moneyTot}}</p>
+		  <p>Profitti={{stat.moneyProfit}}</p>
+		  <p>Media punti={{stat.pointsAvg}}</p>
+		  <p>Media profitti={{stat.moneyAvg}}</p>
+		  <p>Quote={{stat.payTot}}</p>
+		  <p>Numero tornei={{stat.matchTot}}</p>
+		</li>
+	  </ul>
+
+	</div>
+  </div>
+</div>
+
+
+
