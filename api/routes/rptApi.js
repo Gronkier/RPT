@@ -5,7 +5,7 @@ var BSON = mongo.BSONPure;
 
 
 // Mongo Lab URI
-var uri = process.env.CUSTOMCONNSTR\_MONGOLAB\_URI;
+var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
 var db = null;
 var mongoClient = mongo.MongoClient;
 mongoClient.connect(uri, {}, function(error, database){       
