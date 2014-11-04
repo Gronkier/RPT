@@ -17,7 +17,7 @@ statControllers.controller('StatListCtrl', ['$scope', '$http', '$location',
 	$http({	method: 'GET', 
 			//url: 'http://localhost:3003/api/stats/2014/2014/pointsTot' //'http://localhost:3000/stats',
 			
-			url: protocol.concat(host,':3003/api/stats/',$scope.yFrom, '/',$scope.yTo,'/',$scope.orderProp)
+			url: protocol.concat(host,'/api/stats/',$scope.yFrom, '/',$scope.yTo,'/',$scope.orderProp)
 			//params: {"yFrom": '2014', "yTo": '2014', "type": 'pointsTot' }
 			})
 		.success(function(data) {
