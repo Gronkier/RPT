@@ -1,7 +1,7 @@
 var statControllers = angular.module('statControllers', []);
 
 statControllers.controller('StatListCtrl', ['$scope', '$http', '$location'
-  function($scope, $http) {
+  function($scope, $http, $location) {
 	$http({	method: 'GET', 
 			url: 'http://'.concat($location.host(), ':3003/api/stats/2014/2014/pointsTot') //'http://localhost:3000/stats',
 			//params: {yFrom: 2014, yTo: 2014, type: 'pointsTot' }*/
