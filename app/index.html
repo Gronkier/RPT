@@ -1,28 +1,46 @@
 <!doctype html>
 
 <!-- ASSIGN ANGULAR MODULE -->
-<html lang="en" ng-app="rptApp">
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> Optimize mobile viewport -->
 	<title>Reda Poker Tour</title>
 
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-	<link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/app.css">
-	<link rel="stylesheet" href="css/animations.css">
-
+	<style>
+        .navbar { border-radius:0; }
+    </style>
+	
 	<script src="bower_components/jquery/jquery.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
 	<script src="bower_components/angular-route/angular-route.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.js"></script>
 	
 	<script src="routes/rptApp.js"></script>
 	<script src="controllers/statControllers.js"></script>
-	<!--<script src="controllers/playerControllers.js"></script>
+	<script src="controllers/playerControllers.js"></script>
 	<script src="controllers/tournamentControllers.js"></script>
-	<script src="services/services.js"></script>-->
+	<script src="services/dbServices.js"></script>
 
 </head>
-<body>
+<body ng-app="rptApp">
+	
+<!-- NAVIGATION -->
+<nav class="navbar navbar-inverse" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" ui-sref="#">
+				<img class="media-left" ng-src="resources/logo/logo.jpg">
+			</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li><a ui-sref="home">Players</a></li>
+			<li><a ui-sref="about">Stats</a></li>
+		</ul>
+	</div>
+</nav>
 	
   <div class="view-container">
     <div ng-view class="view-frame"></div>
