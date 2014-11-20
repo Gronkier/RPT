@@ -1,7 +1,7 @@
 'use strict';
 
 var servicePlayer = angular.module('playerServices', []);
-var port = '3003';
+var port = '';
 //var port = '';
 
 servicePlayer.factory('playerService', ['$http', '$location', function($http, $location){
