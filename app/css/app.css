@@ -1,11 +1,44 @@
 /* app css stylesheet */
 
+.bottom10 {
+  margin-bottom:10px;
+}
+top0 {
+  margin-top:0px;
+}
+.top10 {
+  margin-top:10px;
+}
+
+.width100 {
+  width:100px;
+}
+
+.navbar {
+  border-radius:0;
+}
+
 body {
-  padding-top: 20px;
+  padding-top: 50px;
 }
 
 
-.phone-images {
+
+
+
+
+
+ul.playerPanel {
+  list-style: none;
+  margin: 0;
+}
+
+li.playerPanel {
+  list-style: none;
+  margin: 0;
+}
+
+.playerImage {
   background-color: white;
   width: 450px;
   height: 450px;
@@ -14,9 +47,7 @@ body {
   float: left;
 }
 
-.phones {
-  list-style: none;
-}
+
 
 .thumb {
   float: left;

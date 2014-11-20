@@ -1,0 +1,69 @@
+<div class="container-fluid">
+
+	<div class="row bottom10">
+		<div class="col-md-4 col-sm-6 col-xs-12 top10">
+			<div class="input-group" align="right">
+				<input class="form-control" ng-model="query" type="text"  placeholder="Cerca">
+				<span class="input-group-addon"><i class="fa fa-search"></i></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6 col-xs-12 top10">
+			<select class="form-control" ng-model="orderProp">
+				<option value="pointsTot">Punteggio</option>
+				<option value="winTot">Vittorie</option>
+				<option value="moneyTot">Montepremi</option>
+				<option value="moneyProfit">Profitti</option>
+				<option value="pointsAvg">Media punti</option>
+				<option value="moneyAvg">Media profitti</option>
+				<option value="headsupTot">Numero HeadsUp</option>
+				<option value="headsupPerc">Percentuale Headsup</option>
+				<option value="payTot">Quote</option>
+				<option value="matchTot">Numero tornei</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="well" ng-repeat="stat in stats | filter:query | orderBy:orderProp:true" >
+				<div class="row">
+					<div class="col-md-3 col-sm-3 col-xs-12">
+						<h4 class="top0"><span class="label label-primary">{{stat._id}}</span></h4>
+						<div class="thumbnail width100" href="#/players/{{stat._id}}">
+							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-6">
+						<dl class="dl-horizontal">
+							<dt>Punteggio</dt>
+							<dd>{{stat.pointsTot.toFixed(2)}}</dd>
+							<dt>Vittorie</dt>
+							<dd>{{stat.winTot}}</dd>
+							<dt>Montepremi</dt>
+							<dd>{{stat.moneyTot}}</dd>
+							<dt>Profitti</dt>
+							<dd>{{stat.moneyProfit}}</dd>
+							<dt>Media punti</dt>
+							<dd>{{stat.pointsAvg.toFixed(2)}}</dd>
+						</dl>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-6">
+						<dl class="dl-horizontal">
+							<dt>Media profitti</dt>
+							<dd>{{stat.moneyAvg.toFixed(2)}}</dd>
+							<dt>Numero HeadsUp</dt>
+							<dd>{{stat.headsupTot}}</dd>
+							<dt>Percentuale Headsup</dt>
+							<dd>{{stat.headsupPerc.toFixed(2)}}</dd>
+							<dt>Quote</dt>
+							<dd>{{stat.payTot}}</dd>
+							<dt>Numero tornei</dt>
+							<dd>{{stat.matchTot}}</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

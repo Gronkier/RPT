@@ -17,6 +17,7 @@
     "angular-route": "~1.2.x",
     "angular-resource": "~1.2.x",
     "angular-animate": "~1.2.x",
-	"angular-bootstrap" : "0.11.x"
-  }
+	"angular-bootstrap" : "0.11.x",
+	"Font-Awesome": "*"
+	}
 }

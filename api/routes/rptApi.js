@@ -112,6 +112,7 @@ exports.getPlayerStats = function(req, res) {
 					payTot:{$sum: '$results.pay'},
 					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
 					headsupTot:{$sum: {$cond: [{$or:[{$eq:['$results.pos', 1]},{$eq:['$results.pos', 2]}]}, 1, 0 ]}},
+					headsupTrend : {$sum: {$cond: [{$lte:['$results.pos', 2]}, {$cond: [{$eq:['$results.pos', 1]}, 1, -1 ]}, 0 ]}},
 					matchTot:{$sum: 1}
 					}},
 		    {$project : {
@@ -120,26 +121,62 @@ exports.getPlayerStats = function(req, res) {
 					moneyTot: 1,
 					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
 					winTot: 1,
+					winPerc : { $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]},
 					headsupTot : 1,
 					headsupPerc : {$cond: [ {$gt:['$headsupTot', 0]}, { $multiply: [{ $divide:[ "$winTot", "$headsupTot" ]},100]}, 0 ]},
 					pointsAvg:1,
 					moneyAvg:1,
 					payTot: 1,
 					matchTot:1,
+					headsupTrend : 1
 					}},
 			//{$sort: {sortAction: -1, pointsTot: -1, moneyTot: -1}}
 			sort
 		    ],function(err, results) {
-			var stats = {stats:results};
-			res.json(stats);
+			//var stats = {stats:results};
+			res.json(results);
         });
     });
 };
 
 
 
+exports.getAllPlayers = function(req, res) {	
+    var y = req.params.y;	
+    //console.log('Retrieving players: ' + y);
+    db.collection('tournaments', function(err, collection) {
+		collection.aggregate([
+			{$match : {year : parseInt(y)}},
+		    {$unwind:'$results'},
+		    {$group: { 
+					_id:'$results.player_id',
+					pointsTot:{$sum: '$results.points'},
+					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
+					winFinalTot:{$sum: {$cond: [ {$and: [{$eq:['$results.pos', 1]}, {$eq:['$details.final', 1]}]}, 1, 0 ]}},
+					matchTot:{$sum: 1}
+					}},
+		    {$project : {
+					_id: 1, 
+					pointsTot: 1,
+					winTot: 1,
+					winFinalTot: 1,
+					matchTot:1
+					}},
+			{$sort : {
+					winFinalTot:-1,
+					winTot:-1,
+					pointsTot:-1
+					}}
+		    ],function(err, results) {
+			//var players = {players:results};
+			res.json(results);
+        });
+    });
+};
 
-exports.getPlayers = function(req, res) {	
+
+
+exports.getYearPlayers = function(req, res) {	
     var y = req.params.y;	
     //console.log('Retrieving players: ' + y);
     db.collection('tournaments', function(err, collection) {
@@ -150,15 +187,13 @@ exports.getPlayers = function(req, res) {
 					_id:'$results.player_id',
 					pointsTot:{$sum: '$results.points'},
 					stack:{$sum: 0},
-					pos:{$sum: 0},
-					matchTot:{$sum: 1}
+					pos:{$sum: 0}
 					}},
 		    {$project : {
 					_id: 1, 
 					pointsTot: 1,
 					stack: 1,
-					pos: 1,
-					matchTot:1,
+					pos: 1
 					}},
 			{$sort : {
 					pointsTot:-1
@@ -172,10 +207,10 @@ exports.getPlayers = function(req, res) {
 					else
 						results[i].pos++;
 				}
-				results[i].stack= 3333.33 + 3333.33 * results[i].pointsTot/results[0].pointsTot + 3333.33 * (1- ((results[i]).pos-1)/(results.length-1));
+				results[i].stack= 3000 + 3500 * results[i].pointsTot/results[0].pointsTot + 3500 * (1- ((results[i]).pos-1)/(results.length-1));
 			}
-			var players = {players:results};
-			res.json(players);
+			//var players = {players:results};
+			res.json(results);
         });
     });
 };

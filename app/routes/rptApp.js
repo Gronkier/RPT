@@ -1,29 +1,35 @@
 'use strict';
 
 // Angular module, defining routes for the app
-angular.module('rptApp', ['ngRoute','statControllers'])
+angular.module('rptApp', [
+	'ngRoute',
+	'playerServices',
+	'playerControllers',
+	'statControllers',
+	'navbarControllers'
+	//'tournamentServices',
+	//'tournamentControllers'
+	])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
+			.when('/players', { 
+				templateUrl: 'views/players/players.html', 
+				controller: 'playerController'  
+				})
 			.when('/stats', { 
-				templateUrl: 'views/statList.html', 
-				controller: 'StatListCtrl'
-				})
-			/*.when('/players', { 
-				templateUrl: 'views/playerList.html', 
-				controller: playerListCtrl  
-				})
-			.when('/player/:playerId', { 
-				templateUrl: 'views/playerEdit.html', 
-				controller: playerEditCtrl  
+				templateUrl: 'views/players/stats.html', 
+				controller: 'statController'
 				})
 			.when('/tournaments', { 
-				templateUrl: 'views/tournamentList.html', 
-				controller: tournamentListCtrl  
-				})
+				templateUrl: 'views/tournaments/tournaments.html', 
+				//controller: 'tournamentController'  
+				})/*
 			.when('/tournament/:tournamentId', { 
 				templateUrl: 'views/tournamentEdit.html', 
 				controller: tournamentEditCtrl  
 				})*/
 			// If invalid route, just redirect to the main list view
-			.otherwise({ redirectTo: '/stats' });
+			.otherwise({ 
+				redirectTo: '/players'
+				});
 	}]);

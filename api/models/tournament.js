@@ -12,8 +12,8 @@ var tournamentPlayerSchema = new mongoose.Schema({
 // sub document schema for tournament detail
 var tournamentDetailSchema = new mongoose.Schema({ 
 	location: String,
-	tables: Number,
-	yearFinal: Boolean
+	tables: { type: Number, default: 1 },
+	final: { type: Boolean, default: 0 }
 });
 
 // document schema for tournament
@@ -21,6 +21,6 @@ exports.tournamentSchema = new mongoose.Schema({
 	_id: { type: String, required: true },
 	year: Number,
 	date: { type: Date, default: Date.now },
-	details: tournamentDetailSchema
+	details: tournamentDetailSchema,
 	results: [tournamentPlayerSchema]
 });

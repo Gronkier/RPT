@@ -1,29 +1,15 @@
 // public/core.js
-var playerControllers = angular.module('playerControllers', []);
+var statControllers = angular.module('tournamentControllers', []);
 
 
 
-playerControllers.controller('playerListCtrl', ['$scope', '$http',
-  function($scope, $http) {
-    //$http.get('http://localhost:3000\stats\2014\2014\pointsTot?callback=JSON_CALLBACK')
-	//$http.get('http://localhost:3000\statS\2014\2014\POINTSTOT')
-	$http({	method: 'GET', 
-			url: 'http://localhost:3003/stats/2014/2014/pointsTot' /*'http://localhost:3000\stats',
-			params: {yFrom: 2014, yTo: 2014, type: 'pointsTot' }*/
-			})
-		.success(function(data) {
-			$scope.stats = data.stats;
-			console.log(data);
-		})
-		.error(function(data) {
-			console.log('Error: ' + data);
-		});
-	
-    $scope.orderProp = 'pointsTot';
+statControllers.controller('TournamentListCtrl', ['$scope', 'Tournaments',
+  function($scope, Tournaments) {
+    $scope.tournaments = Tournaments.query();
   }]);
 
  /* 
-statControllers.controller('playerEditCtrl', ['$scope', 'Stats',
+statControllers.controller('tournamentEditCtrl', ['$scope', 'Stats',
   function($scope, Stats) {
     $scope.stats = Stats.query();
     $scope.orderProp = 'pointsTot';

@@ -61,7 +61,8 @@ apiRouter.get('/tournaments/:id', rpt.findTournaments);
 apiRouter.post('/tournaments', rpt.addTournaments);
 //apiRouter.put('/tournaments/:id', rpt.updateTournaments);
 apiRouter.delete('/tournaments/:id', rpt.deleteTournaments); 
-apiRouter.get('/players/:y', rpt.getPlayers);
+apiRouter.get('/players', rpt.getAllPlayers);
+apiRouter.get('/players/:y', rpt.getYearPlayers);
 apiRouter.get('/stats/:yFrom/:yTo/:type', rpt.getPlayerStats);
 app.use('/api', apiRouter); // all routes will be prefixed with /api
 
