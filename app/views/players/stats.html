@@ -27,14 +27,14 @@
 		<div class="col-md-12">
 			<div class="well well-sm" ng-repeat="stat in stats | filter:query | orderBy:orderProp:true" >
 				<div class="row">
-					<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="col-md-3 col-sm-3 col-xs-12 no-margin">
 						<h4 class="top0"><span class="label label-primary">{{stat._id}}</span></h4>
 						<div class="thumbnail width100" href="#/players/{{stat._id}}">
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6">
-						<dl class="dl-horizontal">
+					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
+						<dl class="dl-horizontal no-margin">
 							<dt>Punteggio</dt>
 							<dd>{{stat.pointsTot.toFixed(2)}}</dd>
 							<dt>Vittorie</dt>
@@ -49,8 +49,8 @@
 							<dd>{{stat.winPerc.toFixed(2)}}</dd>
 						</dl>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6">
-						<dl class="dl-horizontal">
+					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
+						<dl class="dl-horizontal no-margin">
 							<dt>Media profitti</dt>
 							<dd>{{stat.moneyAvg.toFixed(2)}}</dd>
 							<dt>Numero HeadsUp</dt>

@@ -1,26 +1,32 @@
 /* app css stylesheet */
-
+.bottom0 {
+  margin-bottom:0px;
+}
 .bottom10 {
   margin-bottom:10px;
 }
-top0 {
+.top0 {
   margin-top:0px;
 }
 .top10 {
   margin-top:10px;
 }
-
 .width100 {
   width:100px;
 }
-
 .navbar {
   border-radius:0;
 }
-
 body {
   padding-top: 50px;
 }
+.no-margin {
+  margin-top:0px;
+  margin-bottom:0px;
+}
+
+
+
 
 
 
