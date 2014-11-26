@@ -97,8 +97,8 @@ exports.getPlayerStats = function(req, res) {
 	var type = req.params.type;		
 	var sort = { $sort : {} };
 		sort.$sort[type] = -1;
-			
-    //console.log('Retrieving stats: ' + yFrom + ' - ' +yTo);
+
+		//console.log('Retrieving stats: ' + yFrom + ' - ' +yTo);
     db.collection('tournaments', function(err, collection) {
 		collection.aggregate([
 			{$match : {year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}},
@@ -112,31 +112,53 @@ exports.getPlayerStats = function(req, res) {
 					payTot:{$sum: '$results.pay'},
 					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
 					headsupTot:{$sum: {$cond: [{$or:[{$eq:['$results.pos', 1]},{$eq:['$results.pos', 2]}]}, 1, 0 ]}},
-					headsupTrend : {$sum: {$cond: [{$lte:['$results.pos', 2]}, {$cond: [{$eq:['$results.pos', 1]}, 1, -1 ]}, 0 ]}},
+					//headsupTrend:{$sum: {$cond: [{$lte:['$results.pos', 2]},
+					//	                  {$cond: [{$eq:['$results.pos', 1]},
+					//					  {$cond: [{$lte:['$headsupTrend', 0]}, -'$headsupTrend' +1, +1 ]},
+					//					  {$cond: [{$gte:['$headsupTrend', 0]}, -'$headsupTrend' -1, -1 ]}
+					//					  ]},0]}},
 					matchTot:{$sum: 1}
 					}},
 		    {$project : {
 					_id: 1, 
 					pointsTot: 1,
-					moneyTot: 1,
-					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
+					pointsAvg:1,
 					winTot: 1,
 					winPerc : { $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]},
 					headsupTot : 1,
 					headsupPerc : {$cond: [ {$gt:['$headsupTot', 0]}, { $multiply: [{ $divide:[ "$winTot", "$headsupTot" ]},100]}, 0 ]},
-					pointsAvg:1,
+					moneyTot: 1,
 					moneyAvg:1,
-					payTot: 1,
-					matchTot:1,
-					headsupTrend : 1
+					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
+					moneyProfitAvg: { $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]},
+				 	matchTot:1,
+					payTot: 1
+					//headsupTrend : 1
 					}},
 			//{$sort: {sortAction: -1, pointsTot: -1, moneyTot: -1}}
 			sort
 		    ],function(err, results) {
-			//var stats = {stats:results};
 			res.json(results);
         });
     });
+};
+
+exports.getStatTypes = function(req, res) {
+	var statTypes = [
+						{type:'pointsTot', label:'Punti'},
+						{type:'pointsAvg', label:'Media punti'},
+						{type:'winTot', label:'Vittorie'},
+						{type:'winPerc', label:'Percentuale vittorie'},
+						{type:'headsupTot', label:'Headsup'},
+						{type:'headsupPerc', label:'Percentuale headsup'},
+						{type:'moneyTot', label:'Montepremi'},
+						{type:'moneyAvg', label:'Media montepremi'},
+						{type:'moneyProfit', label:'Profitti'},
+						{type:'moneyProfitAvg', label:'Media profitti'},
+						{type:'matchTot', label:'Tornei'},
+						{type:'payTot', label:'Quote'}
+					];
+	res.send(statTypes);
 };
 
 

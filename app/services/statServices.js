@@ -1,46 +1,52 @@
 'use strict';
 
-var dbTournamentServices = angular.module('tournamentServices', []);
+var serviceStats = angular.module('statServices', []);
 var port = '';
 //var port = '3003';
 
-dbTournamentServices.factory('tournamentsService', ['$http', '$location', function($http, $location){
+
+serviceStats.factory('statService', ['$http', '$location', function($http, $location){
 
   var protocol = $location.protocol().concat('://');
   var host = $location.host();
-  //var year = new Date().getFullYear();
-  return {
-    yearTournaments: function(year, callback) {
-      $http({ method: 'GET',
-        //url: 'http://localhost:3003/api/tournaments/:y'
-        url: protocol.concat(host,':', port, '/api/tournaments/', year)
-      })
-          .success(function(data) {
-            console.log(data);
-            callback(data);
+  return { 
+        stats: function(yFrom, yTo, type, callback) { 
+            $http({ method: 'GET', 
+              //url: 'http://localhost:3003/api/stats/2014/2014/pointsTot'
+              url: protocol.concat(host,':', port, '/api/stats/',yFrom, '/',yTo,'/',type)
+              })
+              .success(function(data) {
+                console.log(data);
+                callback(data);  
+              })
+              .error(function(data) {
+                console.log('Error: ' + data);
+                callback(data);
+              });
+        },
+        statTypes: function(callback) {
+          $http({ method: 'GET',
+            //url: 'http://localhost:3003/api/stats/2014/2014/pointsTot'
+            url: protocol.concat(host,':', port, '/api/stat-types')
           })
-          .error(function(data) {
-            console.log('Error: ' + data);
-            callback(data);
-          });
-    },
-
-    lastTournament: function(callback) {
-      $http({ method: 'GET',
-        //url: 'http://localhost:3003/api/tournament'
-        url: protocol.concat(host,':', port, '/api/tournament')
-      })
-          .success(function(data) {
-            console.log(data);
-            callback(data);
-          })
-          .error(function(data) {
-            console.log('Error: ' + data);
-            callback(data);
-          });
-    }
-
+              .success(function(data) {
+                console.log(data);
+                callback(data);
+              })
+              .error(function(data) {
+                console.log('Error: ' + data);
+                callback(data);
+              });
+        }
   }}]);
+  
+
+
+
+
+
+
+
 
 
 
@@ -52,7 +58,7 @@ dbTournamentServices.factory('tournamentsService', ['$http', '$location', functi
 
 
 //   firstModule.factory( 'katTplLoadingService', function ($http) {
-//     return {
+//     return { 
 //         fn: function(code, callback) { //note the callback argument
 //             $http.get("${createLink(controller:'kats', action:'loadBreedInfo')}",
 //             params:{code: code}) //place your code argument here
@@ -93,6 +99,6 @@ dbTournamentServices.factory('tournamentsService', ['$http', '$location', functi
 //         delete : function(id) {
 //             return $http.delete('/api/nerds/' + id);
 //         }
-//     }
+//     }       
 
 // }]);

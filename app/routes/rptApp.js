@@ -4,6 +4,7 @@
 angular.module('rptApp', [
 	'ngRoute',
 	'playerServices',
+	'statServices',
 	'playerControllers',
 	'statControllers',
 	'navbarControllers'

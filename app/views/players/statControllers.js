@@ -11,6 +11,12 @@ statControllers.controller('statController', ['$scope', 'statService',
                 });
         };
 
+        $scope.getStatTypes =  function() {
+            statService.statTypes(function(data) {
+                $scope.statTypes = data;
+            });
+        };
+
     // $scope.setImage = function(imageUrl) {
     //   $scope.mainImageUrl = imageUrl;
     // };
@@ -20,6 +26,8 @@ statControllers.controller('statController', ['$scope', 'statService',
         $scope.yTo = $scope.yFrom;
         $scope.type = 'pointsTot';
         $scope.getStats();
+        $scope.getStatTypes();
+        //$scope.orderProp =  $scope.statTypes[0];
 	
 }]);
 

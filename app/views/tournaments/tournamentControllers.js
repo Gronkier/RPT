@@ -1,12 +1,32 @@
-// public/core.js
-var statControllers = angular.module('tournamentControllers', []);
+'use strict';
+
+var tournamentControllers = angular.module('tournamentControllers', []);
+
+tournamentControllers.controller('tournamentController', ['$scope', 'tournamentServices',
+	function($scope, tournamentServices) {
+
+		$scope.getYearTournaments =  function() {
+			tournamentServices.yearTournaments($scope.year, function(data) {
+				$scope.tournaments = data;
+			});
+		};
+
+		$scope.getLastTournament =  function() {
+			tournamentServices.lastTournament(function(data) {
+				$scope.lastTournament = data;
+			});
+		};
+
+		// $scope.setImage = function(imageUrl) {
+		//   $scope.mainImageUrl = imageUrl;
+		// };
+
+		$scope.year = new Date().getFullYear();
+		$scope.getLastTournament();
+
+	}]);
 
 
-
-statControllers.controller('TournamentListCtrl', ['$scope', 'Tournaments',
-  function($scope, Tournaments) {
-    $scope.tournaments = Tournaments.query();
-  }]);
 
  /* 
 statControllers.controller('tournamentEditCtrl', ['$scope', 'Stats',

@@ -2,7 +2,7 @@
 
 var servicePlayer = angular.module('playerServices', []);
 var port = '';
-//var port = '';
+//var port = '3003';
 
 servicePlayer.factory('playerService', ['$http', '$location', function($http, $location){
 
@@ -43,27 +43,50 @@ servicePlayer.factory('playerService', ['$http', '$location', function($http, $l
   }}]);
   
 
-servicePlayer.factory('statService', ['$http', '$location', function($http, $location){
-
-  var protocol = $location.protocol().concat('://');
-  var host = $location.host();
-  return { 
-        stats: function(yFrom, yTo, type, callback) { 
-            $http({ method: 'GET', 
-              //url: 'http://localhost:3003/api/stats/2014/2014/pointsTot'
-              url: protocol.concat(host,':', port, '/api/stats/',yFrom, '/',yTo,'/',type)
-              })
-              .success(function(data) {
-                console.log(data);
-                callback(data);  
-              })
-              .error(function(data) {
-                console.log('Error: ' + data);
-                callback(data);
-              });
-        }
-  }}]);
+//servicePlayer.factory('statService', ['$http', '$location', function($http, $location){
+//
+//  var protocol = $location.protocol().concat('://');
+//  var host = $location.host();
+//  return {
+//        stats: function(yFrom, yTo, type, callback) {
+//            $http({ method: 'GET',
+//              //url: 'http://localhost:3003/api/stats/2014/2014/pointsTot'
+//              url: protocol.concat(host,':', port, '/api/stats/',yFrom, '/',yTo,'/',type)
+//              })
+//              .success(function(data) {
+//                console.log(data);
+//                callback(data);
+//              })
+//              .error(function(data) {
+//                console.log('Error: ' + data);
+//                callback(data);
+//              });
+//        },
+//        statTypes: function(yFrom, yTo, type, callback) {
+//          $http({ method: 'GET',
+//            //url: 'http://localhost:3003/api/stats/2014/2014/pointsTot'
+//            url: protocol.concat(host,':', port, '/api/stats/',yFrom, '/',yTo,'/',type)
+//          })
+//              .success(function(data) {
+//                console.log(data);
+//                callback(data);
+//              })
+//              .error(function(data) {
+//                console.log('Error: ' + data);
+//                callback(data);
+//              });
+//        }
+//  }}]);
   
+
+
+
+
+
+
+
+
+
 
 
 
