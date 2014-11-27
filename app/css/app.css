@@ -25,7 +25,15 @@ body {
   margin-bottom:0px;
 }
 
-
+.gold{
+  color: gold;
+}
+.silver{
+  color: silver;
+}
+.bronze{
+  color: saddlebrown;
+}
 
 
 
