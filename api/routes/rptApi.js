@@ -208,12 +208,14 @@ exports.getYearPlayers = function(req, res) {
 		    {$group: { 
 					_id:'$results.player_id',
 					pointsTot:{$sum: '$results.points'},
+					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
 					stack:{$sum: 0},
 					pos:{$sum: 0}
 					}},
 		    {$project : {
 					_id: 1, 
 					pointsTot: 1,
+					winTot: 1,
 					stack: 1,
 					pos: 1
 					}},
