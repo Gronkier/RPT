@@ -11,11 +11,16 @@ statControllers.controller('statController', ['$scope', 'statService',
                 });
         };
 
+
+
         $scope.getStatTypes =  function() {
             statService.statTypes(function(data) {
                 $scope.statTypes = data;
+                $scope.statTypeSelected = $scope.statTypes[0];
             });
         };
+
+
 
         $scope.getNumber = function(num) {
             if (num > 0)
@@ -35,9 +40,25 @@ statControllers.controller('statController', ['$scope', 'statService',
             return new Array(bronze);
         };
 
-            // $scope.setImage = function(imageUrl) {
-    //   $scope.mainImageUrl = imageUrl;
-    // };
+        $scope.getSelectedLabel = function() {
+            return $scope.statTypeSelected.label;
+        };
+
+        $scope.getSelectedValue = function(stat) {
+            $scope.currentStat = stat;
+            var valnum = $scope.$eval('currentStat.' + $scope.statTypeSelected.type);
+            var index = $scope.stats.indexOf(stat);
+            return valnum.toFixed(2);
+        };
+
+        //$scope.getOrderIndex = function(stat) {
+        //    var index = $scope.stats.indexOf(stat);
+        //    return index+1;
+        //};
+
+        // $scope.setImage = function(imageUrl) {
+        //   $scope.mainImageUrl = imageUrl;
+        // };
 
         $scope.orderProp = 'pointsTot';
         $scope.yFrom = new Date().getFullYear();
@@ -45,6 +66,11 @@ statControllers.controller('statController', ['$scope', 'statService',
         $scope.type = 'pointsTot';
         $scope.getStats();
         $scope.getStatTypes();
+
+
+        $scope.onchange = function(type) {
+           // $scope.statTypeSelected = type;
+        };
         //$scope.orderProp =  $scope.statTypes[0];
 	
 }]);

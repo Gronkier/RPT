@@ -8,32 +8,24 @@
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-6 col-xs-12 top10">
-			<select class="form-control" ng-model="orderProp">
-				<option ng-repeat="statType in statTypes" value="{{statType.type}}">{{statType.label}}</option>
-				<!--<option value="pointsTot">Punti</option>-->
-				<!--<option value="winTot">Vittorie</option>-->
-				<!--<option value="headsupTot">HeadsUp</option>-->
-				<!--<option value="moneyTot">Montepremi</option>-->
-				<!--<option value="moneyProfit">Profitti</option>-->
-				<!--<option value="matchTot">Tornei</option>-->
-				<!--<option value="pointsAvg">Media punti</option>-->
-				<!--<option value="winPerc">Percentuale vittorie</option>-->
-				<!--<option value="headsupPerc">Percentuale headsup</option>-->
-				<!--<option value="moneyAvg">Media montepremi</option>-->
-				<!--<option value="moneyProfitAvg">Media profitti</option>-->
-				<!--<option value="payTot">Quote</option>-->
+			<select class="form-control" ng-model="statTypeSelected"
+					ng-options="statType as statType.label for statType in statTypes" ng-change="onchange(statTypeSelected)">
 			</select>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-md-12">
-			<div class="well well-sm" ng-repeat="stat in stats | filter:query | orderBy:orderProp:true" >
+			<div class="well well-sm" ng-repeat="stat in stats | filter:query | orderBy:statTypeSelected.type:true" >
 				<div class="row">
-					<div class="col-md-3 col-sm-3 col-xs-12 no-margin">
+					<div class="col-md-4 col-sm-3 col-xs-12 no-margin">
 						<h4 class="top0">
+							<span class="label label-primary">{{$index+1}}</span>
 							<span class="label label-primary">{{stat._id}}</span>
-							<span class="label label-default">{{stat.orderProp}}</span>
+						</h4>
+						<h4 class="top0">
+							<span class="label label-default">{{getSelectedLabel()}}</span>
+							<span class="label label-default">{{getSelectedValue(stat)}}</span>
 						</h4>
 						<div class="thumbnail width100" href="#/players/{{stat._id}}">
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
