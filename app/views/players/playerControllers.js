@@ -32,8 +32,7 @@ playerControllers.controller('playerController', ['$scope', 'playerService',
     // $scope.setImage = function(imageUrl) {
     //   $scope.mainImageUrl = imageUrl;
     // };
-  	
-  	    $scope.orderProp = 'pointsTot';
+
         $scope.year = new Date().getFullYear();
         $scope.getPlayers();
 	

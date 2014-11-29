@@ -91,7 +91,30 @@ exports.deleteTournaments = function(req, res) {
 
 
 
-exports.getPlayerStats = function(req, res) {	
+
+exports.getYearTournaments = function(req, res) {
+	var y = req.params.y;
+	db.collection('tournaments', function(err, collection) {
+		collection.find({'year': parseInt(y)}, {'sort':[['date','desc']]}).toArray(function(err, results) {
+			res.json(results);
+		});
+	});
+};
+
+exports.getLastTournament = function(req, res) {
+	db.collection('tournaments', function(err, collection) {
+		collection.find({}, {'limit':1, 'sort':[['date','desc']]}).toArray(function(err, results) {
+			res.json(results);
+		});
+	});
+};
+
+
+
+
+
+
+exports.getStats = function(req, res) {
     var yFrom = req.params.yFrom;
 	var yTo = req.params.yTo;
 	var type = req.params.type;		
@@ -163,6 +186,8 @@ exports.getStatTypes = function(req, res) {
 
 
 
+
+
 exports.getAllPlayers = function(req, res) {	
     var y = req.params.y;	
     //console.log('Retrieving players: ' + y);
@@ -195,8 +220,6 @@ exports.getAllPlayers = function(req, res) {
         });
     });
 };
-
-
 
 exports.getYearPlayers = function(req, res) {	
     var y = req.params.y;	

@@ -18,12 +18,12 @@ angular.module('rptApp', [
 				controller: 'playerController'  
 				})
 			.when('/stats', { 
-				templateUrl: '../views/stats/stats.html',
+				templateUrl: 'views/stats/stats.html',
 				controller: 'statController'
 				})
 			.when('/tournaments', { 
 				templateUrl: 'views/tournaments/tournaments.html', 
-				//controller: 'tournamentController'  
+				controller: 'tournamentController'
 				})/*
 			.when('/tournament/:tournamentId', { 
 				templateUrl: 'views/tournamentEdit.html', 

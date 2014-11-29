@@ -56,16 +56,21 @@ app.use("/*", function (req, res, next) {
 // api call
 var	rpt = require('./api/routes/rptApi');
 var apiRouter = express.Router(); 				// get an instance of the express Router
-apiRouter.get('/tournaments', rpt.getTournaments);
-apiRouter.get('/tournaments/:id', rpt.findTournaments);
-apiRouter.post('/tournaments', rpt.addTournaments);
-//apiRouter.post('/tournaments/:y', rpt.getYearTournaments);
+//apiRouter.get('/tournaments', rpt.getTournaments);
+//apiRouter.get('/tournaments/:id', rpt.findTournaments);
+//apiRouter.post('/tournaments', rpt.addTournaments);
+//apiRouter.delete('/tournaments/:id', rpt.deleteTournaments);
 //apiRouter.put('/tournaments/:id', rpt.updateTournaments);
-apiRouter.delete('/tournaments/:id', rpt.deleteTournaments); 
+
+apiRouter.get('/tournament', rpt.getLastTournament);
+apiRouter.get('/tournaments/:y', rpt.getYearTournaments);
+
 apiRouter.get('/players', rpt.getAllPlayers);
 apiRouter.get('/players/:y', rpt.getYearPlayers);
-apiRouter.get('/stats/:yFrom/:yTo/:type', rpt.getPlayerStats);
+
+apiRouter.get('/stats/:yFrom/:yTo/:type', rpt.getStats);
 apiRouter.get('/stat-types', rpt.getStatTypes);
+
 app.use('/api', apiRouter); // all routes will be prefixed with /api
 
 // app call

@@ -60,7 +60,6 @@ statControllers.controller('statController', ['$scope', 'statService',
         //   $scope.mainImageUrl = imageUrl;
         // };
 
-        $scope.orderProp = 'pointsTot';
         $scope.yFrom = new Date().getFullYear();
         $scope.yTo = $scope.yFrom;
         $scope.type = 'pointsTot';
