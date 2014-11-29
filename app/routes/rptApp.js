@@ -18,7 +18,7 @@ angular.module('rptApp', [
 				controller: 'playerController'  
 				})
 			.when('/stats', { 
-				templateUrl: 'views/players/stats.html', 
+				templateUrl: '../views/stats/stats.html',
 				controller: 'statController'
 				})
 			.when('/tournaments', { 
