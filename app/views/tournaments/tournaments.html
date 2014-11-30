@@ -26,26 +26,28 @@
           </div>
         </div>
         <div class="row" ng-repeat="result in tournament.results">
-          <div class="col-md-4 col-sm-4 col-xs-12 no-margin">
-            <div class="row">
-              <div class="col-md-4 col-sm-4 col-xs-5 no-margin">
-                <div class="thumbnail width70"  href="#/players/{{stat._id}}">
-                  <span ng-hide="result.pos>1" class="label label-success width-max">{{result.pos}} {{result.player_id}}</span>
-                  <span ng-hide="result.pos==1" class="label label-info width-max">{{result.pos}} {{result.player_id}}</span>
-                  <img class="width70" ng-src="resources/players/{{result.player_id}}.jpg">
+          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+            <div class="thumbnail">
+              <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-5 no-margin">
+                  <div class="thumbnail width80"  href="#/players/{{stat._id}}">
+                    <span ng-hide="result.pos>1" class="label label-success width-max">{{result.pos}} {{result.player_id}}</span>
+                    <span ng-hide="result.pos==1" class="label label-info width-max">{{result.pos}} {{result.player_id}}</span>
+                    <img class="width80" ng-src="resources/players/{{result.player_id}}.jpg">
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-8 col-sm-8 col-xs-7 no-margin">
-                <h6>
-                  <dl class="dl-horizontal no-margin">
-                    <dt>Punti</dt>
-                    <dd>{{result.points}}</dd>
-                    <dt>Montepremi</dt>
-                    <dd>{{result.money}}</dd>
-                    <dt>Quota</dt>
-                    <dd>{{result.pay}}</dd>
-                  </dl>
-                </h6>
+                <div class="col-md-8 col-sm-8 col-xs-7 no-margin">
+                  <h6>
+                    <dl class="dl-horizontal no-margin">
+                      <dt>Punti</dt>
+                      <dd>{{result.points}}</dd>
+                      <dt>Montepremi</dt>
+                      <dd>{{result.money}}</dd>
+                      <dt>Quota</dt>
+                      <dd>{{result.pay}}</dd>
+                    </dl>
+                  </h6>
+                </div>
               </div>
             </div>
           </div>
