@@ -3,13 +3,13 @@
 // Angular module, defining routes for the app
 angular.module('rptApp', [
 	'ngRoute',
+	'navbarControllers',
 	'playerServices',
 	'statServices',
 	'playerControllers',
 	'statControllers',
-	'navbarControllers'
-	//'tournamentServices',
-	//'tournamentControllers'
+	'tournamentServices',
+	'tournamentControllers'
 	])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider

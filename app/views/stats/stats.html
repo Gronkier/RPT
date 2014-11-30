@@ -23,10 +23,10 @@
 							<span class="label label-primary">{{$index+1}}</span>
 							<span class="label label-primary">{{stat._id}}</span>
 						</h4>
-						<h4 class="top0">
+						<h5 class="top0">
 							<span class="label label-default">{{getSelectedLabel()}}</span>
 							<span class="label label-default">{{getSelectedValue(stat)}}</span>
-						</h4>
+						</h5>
 						<div class="thumbnail width100" href="#/players/{{stat._id}}">
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
 							<a ng-repeat="i in getNumber(stat.finalTot) track by $index"><i class="fa fa-trophy gold"></i></a>

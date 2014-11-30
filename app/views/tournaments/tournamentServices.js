@@ -1,10 +1,10 @@
 'use strict';
 
-var dbTournamentServices = angular.module('tournamentServices', []);
+var serviceTournament = angular.module('tournamentServices', []);
 var port = '';
 //var port = '3003';
 
-dbTournamentServices.factory('tournamentsService', ['$http', '$location', function($http, $location){
+serviceTournament.factory('tournamentService', ['$http', '$location', function($http, $location){
 
   var protocol = $location.protocol().concat('://');
   var host = $location.host();

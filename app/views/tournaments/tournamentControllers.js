@@ -2,17 +2,17 @@
 
 var tournamentControllers = angular.module('tournamentControllers', []);
 
-tournamentControllers.controller('tournamentController', ['$scope', 'tournamentServices',
-	function($scope, tournamentServices) {
+tournamentControllers.controller('tournamentController', ['$scope', 'tournamentService',
+	function($scope, tournamentService) {
 
 		$scope.getYearTournaments =  function() {
-			tournamentServices.yearTournaments($scope.year, function(data) {
+			tournamentService.yearTournaments($scope.year, function(data) {
 				$scope.tournaments = data;
 			});
 		};
 
 		$scope.getLastTournament =  function() {
-			tournamentServices.lastTournament(function(data) {
+			tournamentService.lastTournament(function(data) {
 				$scope.lastTournament = data;
 			});
 		};
@@ -22,7 +22,7 @@ tournamentControllers.controller('tournamentController', ['$scope', 'tournamentS
 		// };
 
 		$scope.year = new Date().getFullYear();
-		$scope.getLastTournament();
+		$scope.getYearTournaments();
 
 	}]);
 
