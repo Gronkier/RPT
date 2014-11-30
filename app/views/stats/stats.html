@@ -18,16 +18,16 @@
 		<div class="col-md-12">
 			<div class="well well-sm" ng-repeat="stat in stats | filter:query | orderBy:statTypeSelected.type:true" >
 				<div class="row">
-					<div class="col-md-4 col-sm-3 col-xs-12 no-margin">
+					<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
 						<h4 class="top0">
-							<span class="label label-primary">{{$index+1}}</span>
-							<span class="label label-primary">{{stat._id}}</span>
+							<span class="label label-primary">{{$index+1}} {{stat._id}}</span>
 						</h4>
-						<h5 class="top0">
-							<span class="label label-default">{{getSelectedLabel()}}</span>
-							<span class="label label-default">{{getSelectedValue(stat)}}</span>
-						</h5>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-sm-3 col-xs-12 no-margin">
 						<div class="thumbnail width100" href="#/players/{{stat._id}}">
+							<span class="label label-info">{{getSelectedLabel()}} {{getSelectedValue(stat)}}</span>
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
 							<a ng-repeat="i in getNumber(stat.finalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
 							<a ng-repeat="i in getNumberGold(stat.winTot) track by $index"><i class="fa fa-star gold"></i></a>
@@ -36,36 +36,40 @@
 						</div>
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
-						<dl class="dl-horizontal no-margin">
-							<dt>Punti</dt>
-							<dd>{{stat.pointsTot.toFixed(2)}}</dd>
-							<dt>Vittorie</dt>
-							<dd>{{stat.winTot}}</dd>
-							<dt>HeadsUp</dt>
-							<dd>{{stat.headsupTot}}</dd>
-							<dt>Montepremi</dt>
-							<dd>{{stat.moneyTot}}</dd>
-							<dt>Profitti</dt>
-							<dd>{{stat.moneyProfit}}</dd>
-							<dt>Tornei</dt>
-							<dd>{{stat.matchTot}}</dd>
-						</dl>
+						<h5>
+							<dl class="dl-horizontal no-margin">
+								<dt>Punti</dt>
+								<dd>{{stat.pointsTot.toFixed(2)}}</dd>
+								<dt>Vittorie</dt>
+								<dd>{{stat.winTot}}</dd>
+								<dt>HeadsUp</dt>
+								<dd>{{stat.headsupTot}}</dd>
+								<dt>Montepremi</dt>
+								<dd>{{stat.moneyTot}}</dd>
+								<dt>Profitti</dt>
+								<dd>{{stat.moneyProfit}}</dd>
+								<dt>Tornei</dt>
+								<dd>{{stat.matchTot}}</dd>
+							</dl>
+						</h5>
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
-						<dl class="dl-horizontal no-margin">
-							<dt>Media punti</dt>
-							<dd>{{stat.pointsAvg.toFixed(2)}}</dd>
-							<dt>Percentuale vittorie</dt>
-							<dd>{{stat.winPerc.toFixed(2)}}</dd>
-							<dt>Percentuale headsup</dt>
-							<dd>{{stat.headsupPerc.toFixed(2)}}</dd>
-							<dt>Media montepremi</dt>
-							<dd>{{stat.moneyAvg.toFixed(2)}}</dd>
-							<dt>Media profitti</dt>
-							<dd>{{stat.moneyProfitAvg.toFixed(2)}}</dd>
-							<dt>Quote</dt>
-							<dd>{{stat.payTot}}</dd>
-						</dl>
+						<h5>
+							<dl class="dl-horizontal no-margin">
+								<dt>Media punti</dt>
+								<dd>{{stat.pointsAvg.toFixed(2)}}</dd>
+								<dt>Percentuale vittorie</dt>
+								<dd>{{stat.winPerc.toFixed(2)}}</dd>
+								<dt>Percentuale headsup</dt>
+								<dd>{{stat.headsupPerc.toFixed(2)}}</dd>
+								<dt>Media montepremi</dt>
+								<dd>{{stat.moneyAvg.toFixed(2)}}</dd>
+								<dt>Media profitti</dt>
+								<dd>{{stat.moneyProfitAvg.toFixed(2)}}</dd>
+								<dt>Quote</dt>
+								<dd>{{stat.payTot}}</dd>
+							</dl>
+						</h5>
 					</div>
 				</div>
 			</div>

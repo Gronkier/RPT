@@ -18,18 +18,33 @@
     <div class="col-md-12">
       <div class="well well-sm" ng-repeat="tournament in tournaments | filter:query">
         <div class="row">
-          <div class="col-md-4 col-sm-3 col-xs-12 no-margin">
+          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
             <h4 class="top0">
-              <span class="label label-info">{{tournament.date | date: 'dd MM yyyy'}}</span>
+              <span class="label label-primary width-max"><a ng-hide="!tournament.final"><i class="fa fa-trophy gold"></i></a><a ng-hide="tournament.final"><i class="fa fa-star bronze"></i></a>  {{tournament.date | date: 'dd-MM-yyyy'}}   {{tournament.details.location}}   Tavoli {{tournament.details.tables}}</span>
             </h4>
-            <h5 class="top0">
-              <span class="label label-default">Luogo {{tournament.details.location}}</span>
-              <!--<span class="label label-default">Tavoli {{tournament.details.tables}}</span>-->
-            </h5>
-            <div class="thumbnail width100" ng-repeat="result in tournament.results" href="#/players/{{stat._id}}">
-              <span class="label label-primary">{{result.pos}} {{result.player_id}}</span>
-              <img class="width100" ng-src="resources/players/{{result.player_id}}.jpg">
-              <h6>Punteggio {{result.points}}</h6>
+          </div>
+        </div>
+        <div class="row" ng-repeat="result in tournament.results">
+          <div class="col-md-4 col-sm-4 col-xs-12 no-margin">
+            <div class="row">
+              <div class="col-md-4 col-sm-4 col-xs-5 no-margin">
+                <div class="thumbnail width70"  href="#/players/{{stat._id}}">
+                  <span class="label label-info  width-max">{{result.pos}} {{result.player_id}}</span>
+                  <img class="width70" ng-src="resources/players/{{result.player_id}}.jpg">
+                </div>
+              </div>
+              <div class="col-md-8 col-sm-8 col-xs-7 no-margin">
+                <h6>
+                  <dl class="dl-horizontal no-margin">
+                    <dt>Punti</dt>
+                    <dd>{{result.points}}</dd>
+                    <dt>Montepremi</dt>
+                    <dd>{{result.money}}</dd>
+                    <dt>Quota</dt>
+                    <dd>{{result.pay}}</dd>
+                  </dl>
+                </h6>
+              </div>
             </div>
           </div>
         </div>
