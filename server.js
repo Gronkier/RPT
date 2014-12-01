@@ -71,6 +71,8 @@ apiRouter.get('/players/:y', rpt.getYearPlayers);
 apiRouter.get('/stats/:yFrom/:yTo/:type', rpt.getStats);
 apiRouter.get('/stat-types', rpt.getStatTypes);
 
+apiRouter.get('/headsup', rpt.getHeadsup);
+
 app.use('/api', apiRouter); // all routes will be prefixed with /api
 
 // app call

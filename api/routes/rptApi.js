@@ -6,7 +6,6 @@ var BSON = mongo.BSONPure;
 
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
-	
 var db = null;
 var mongoClient = mongo.MongoClient;
 mongoClient.connect(uri, {}, function(error, database){       
@@ -188,6 +187,7 @@ exports.getStatTypes = function(req, res) {
 
 
 
+
 exports.getAllPlayers = function(req, res) {	
     var y = req.params.y;	
     //console.log('Retrieving players: ' + y);
@@ -263,5 +263,50 @@ exports.getYearPlayers = function(req, res) {
 };
 
 
- 
- 
+
+
+
+
+exports.getHeadsup = function(req, res) {
+	//var y = req.params.y;
+	//console.log('Retrieving players: ' + y);
+	//var y = req.params.y;
+	db.collection('tournaments', function(err, collection) {
+		collection.find({"results.pos":{$lte:2}}, {fields:{"results.player_id":1,"results.pos":1}}).toArray(function(err, results) {
+			var headsups = [];
+			for (i = 0; i < results.length; i++) {
+				var headsup = {
+					player1:results[i].results[0].player_id,
+					points1:1,
+					player2:results[i].results[1].player_id,
+					points2:0};
+				headsups.push(headsup)
+			}
+			var challenges = [];
+			for (i = 0; i < headsups.length; i++) {
+				var found = 0;
+				for (j = 0; j < challenges.length; j++) {
+					if ((challenges[j].player1 == headsups[i].player1 && challenges[j].player2 == headsups[i].player2)) {
+						found = 1;
+						challenges[j].points1++;
+					}
+					if ((challenges[j].player1 == headsups[i].player2 && challenges[j].player2 == headsups[i].player1)) {
+						found = 1;
+						challenges[j].points2++;
+					}
+				}
+				if(!found) {
+					var challenge = {
+							player1: headsups[i].player1,
+							points1: 1,
+							player2: headsups[i].player2,
+							points2: 0
+						};
+					challenges.push(challenge)
+				}
+			}
+			//var players = {players:results};
+			res.json(challenges);
+		});
+	});
+};
