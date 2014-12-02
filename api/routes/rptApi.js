@@ -267,7 +267,7 @@ exports.getYearPlayers = function(req, res) {
 
 
 
-exports.getHeadsup = function(req, res) {
+exports.getHeadsups = function(req, res) {
 	//var y = req.params.y;
 	//console.log('Retrieving players: ' + y);
 	//var y = req.params.y;

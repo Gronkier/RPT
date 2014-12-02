@@ -6,9 +6,11 @@ angular.module('rptApp', [
 	'navbarControllers',
 	'playerServices',
 	'statServices',
+	'headsupServices',
+	'tournamentServices',
 	'playerControllers',
 	'statControllers',
-	'tournamentServices',
+	'headsupControllers',
 	'tournamentControllers'
 	])
 	.config(['$routeProvider', function($routeProvider) {
@@ -21,6 +23,10 @@ angular.module('rptApp', [
 				templateUrl: 'views/stats/stats.html',
 				controller: 'statController'
 				})
+			.when('/headsup', {
+				templateUrl: 'views/headsup/headsup.html',
+				controller: 'headsupController'
+			})
 			.when('/tournaments', { 
 				templateUrl: 'views/tournaments/tournaments.html', 
 				controller: 'tournamentController'

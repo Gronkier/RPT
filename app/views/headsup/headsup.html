@@ -1,0 +1,52 @@
+<div class="container-fluid">
+
+  <div class="row bottom10">
+    <div class="col-md-4 col-sm-6 col-xs-12 top10">
+      <div class="input-group" align="right">
+        <input class="form-control" ng-model="query" type="text"  placeholder="Cerca">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+    <!--<div class="col-md-4 col-sm-6 col-xs-12 top10">-->
+      <!--<select class="form-control" ng-model="statTypeSelected"-->
+              <!--ng-options="statType as statType.label for statType in statTypes" ng-change="onchange(statTypeSelected)">-->
+      <!--</select>-->
+    <!--</div>-->
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="well well-sm" ng-repeat="headsup in headsups | filter:query | orderBy:orderProp:true">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+            <h4 class="top0">
+              <span class="label label-primary">{{headsup.player1}}   vs   {{headsup.player2}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-4 col-xs-4 no-margin">
+            <div class="thumbnail width80"  href="#/players/{{headsup.player1}}">
+              <span ng-hide="headsup.points1<headsup.points2" class="label label-success">{{headsup.player1}}</span>
+              <span ng-hide="headsup.points1>=headsup.points2" class="label label-default">{{headsup.player1}}</span>
+              <img class="width80" ng-src="resources/players/{{headsup.player1}}.jpg">
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-4 no-margin">
+              <br>
+              <br>
+              <span class="label label-primary">{{headsup.points1}} - {{headsup.points2}}</span>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-4 no-margin">
+            <div class="thumbnail width80 pull-right"  href="#/players/{{headsup.player2}}">
+              <span ng-hide="headsup.points2<headsup.points1" class="label label-success">{{headsup.player2}}</span>
+              <span ng-hide="headsup.points2>=headsup.points1" class="label label-default">{{headsup.player2}}</span>
+              <img class="width80" ng-src="resources/players/{{headsup.player2}}.jpg">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
