@@ -67,7 +67,7 @@
 				  <a ng-repeat="i in getNumberGold(player.winTot) track by $index"><i class="fa fa-star gold"></i></a>
 				  <a ng-repeat="i in getNumberSilver(player.winTot) track by $index"><i class="fa fa-star silver"></i></a>
 				  <a ng-repeat="i in getNumberBronze(player.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
-				  <a <i class="fa fa-star white"></i></a>
+				  <a ng-repeat="i in getNumber(7-player.winTot%5) track by $index"><i class="fa fa-star white"></i></a>
 				</div>
 			  </div>
 			</div>
