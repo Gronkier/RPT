@@ -2,7 +2,7 @@
 
 var serviceCommon = angular.module('commonServices', []);
 var port = '';
-//var port = '3003';
+var port = '3003';
 
 serviceCommon.factory('commonService', ['$http', '$location', function($http, $location){
 

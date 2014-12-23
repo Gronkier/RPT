@@ -2,7 +2,7 @@
 
 var serviceStats = angular.module('statServices', []);
 var port = '';
-//var port = '3003';
+var port = '3003';
 
 
 serviceStats.factory('statService', ['$http', '$location', function($http, $location){
