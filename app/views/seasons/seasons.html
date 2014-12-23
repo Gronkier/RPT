@@ -1,0 +1,79 @@
+<div class="container-fluid">
+
+  <div class="row bottom10">
+    <!--<div class="col-md-4 col-sm-6 col-xs-12 top10">
+      <div class="input-group" align="right">
+        <input class="form-control" ng-model="query" type="text"  placeholder="Cerca">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+      </div>
+    </div>-->
+    <div class="col-md-4 col-sm-6 col-xs-12 top10">
+      <select class="form-control" ng-model="yearSelected"
+              ng-options="year as year for year in years" ng-change="onchange(yearSelected)">
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0">
+      <div class="well well-sm">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+            <h4 class="top0">
+              <span class="label label-info">Final Table  {{yearSelected}}</span>
+              <span class="label label-primary"><a ng-hide="finalTournament.details.final=0"><i class="fa fa-trophy gold"></i></a><a ng-hide="finalTournament.details.final=1"><i class="fa fa-star bronze"></i></a>  {{finalTournament.date | date: 'dd-MM-yyyy'}}  {{finalTournament.details.location}}</span>
+              <span class="label label-primary">Tavoli {{finalTournament.details.tables}}  Giocatori {{finalTournament.results.length}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row" >
+          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+            <div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="result in finalTournament.results">
+              <div class="thumbnail width100"  href="#/players/{{stat._id}}">
+                <span ng-hide="result.pos>1" class="label label-success width-max">{{result.pos}} {{result.player_id}}</span>
+                <span ng-hide="result.pos==1" class="label label-default width-max">{{result.pos}} {{result.player_id}}</span>
+                <img class="width100" ng-src="resources/players/{{result.player_id}}.jpg">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="well well-sm">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+            <h4 class="top0">
+				<span class="label label-info">Regular Season  {{yearSelected}}</span>
+				<span class="label label-primary">Giocatori {{players.length}}</span>
+				<span class="label label-primary"> </span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+			  <div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="player in players">
+				<div class="thumbnail width100" href="#/players/{{player._id}}">
+				  <span ng-hide="player.pos>1" class="label label-success width-max">{{player.pos}} {{player._id}} </span>
+                  <span ng-hide="player.pos==1" class="label label-default width-max">{{player.pos}} {{player._id}} </span>
+				  <span ng-hide="player.pos>1" class="label label-success width-max">{{player.pointsTot.toFixed(2)}} </span>
+                  <span ng-hide="player.pos==1" class="label label-default width-max">{{player.pointsTot.toFixed(2)}} </span>
+				  <img class="width100" ng-src="resources/players/{{player._id}}.jpg">
+				  <a ng-repeat="i in getNumber(player.winFinalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
+				  <a ng-repeat="i in getNumberGold(player.winTot) track by $index"><i class="fa fa-star gold"></i></a>
+				  <a ng-repeat="i in getNumberSilver(player.winTot) track by $index"><i class="fa fa-star silver"></i></a>
+				  <a ng-repeat="i in getNumberBronze(player.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
+				  <a <i class="fa fa-star white"></i></a>
+				</div>
+			  </div>
+			</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

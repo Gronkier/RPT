@@ -10,7 +10,7 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
   var host = $location.host();
   //var year = new Date().getFullYear();
   return {
-    yearTournaments: function(year, callback) {
+      yearTournaments: function(year, callback) {
       $http({ method: 'GET',
         //url: 'http://localhost:3003/api/tournaments/:y'
         url: protocol.concat(host,':', port, '/api/tournaments/', year)
@@ -25,10 +25,10 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
           });
     },
 
-    lastTournament: function(callback) {
+      finalYearTournament: function(year, callback) {
       $http({ method: 'GET',
         //url: 'http://localhost:3003/api/tournament'
-        url: protocol.concat(host,':', port, '/api/tournament')
+        url: protocol.concat(host,':', port, '/api/tournament-final/', year)
       })
           .success(function(data) {
             console.log(data);

@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-8 col-md-offset-2">
 			<div class="well well-sm" ng-repeat="player in players | filter:query" >
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
@@ -20,15 +20,16 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-3 col-sm-3 col-xs-12 no-margin">
+					<div class="col-md-1 col-sm-1 col-xs-12 no-margin">
 						<div class="thumbnail width100" href="#/players/{{player._id}}">
 							<img class="width100" ng-src="resources/players/{{player._id}}.jpg">
+							<a ng-repeat="i in getNumber(player.winFinalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
 							<a ng-repeat="i in getNumberGold(player.winTot) track by $index"><i class="fa fa-star gold"></i></a>
 							<a ng-repeat="i in getNumberSilver(player.winTot) track by $index"><i class="fa fa-star silver"></i></a>
 							<a ng-repeat="i in getNumberBronze(player.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
+					<div class="col-md-5 col-sm-4 col-xs-6 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
 								<dt>Punti</dt>
@@ -36,7 +37,7 @@
 							</dl>
 						</h5>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
+					<div class="col-md-5 col-sm-4 col-xs-6 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
 								<dt>Stack finale</dt>

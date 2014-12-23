@@ -15,7 +15,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-8 col-md-offset-2">
 			<div class="well well-sm" ng-repeat="stat in stats | filter:query | orderBy:statTypeSelected.type:true" >
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
@@ -25,17 +25,17 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-4 col-sm-3 col-xs-12 no-margin">
+					<div class="col-md-1 col-sm-1 col-xs-12 no-margin">
 						<div class="thumbnail width100" href="#/players/{{stat._id}}">
 							<span class="label label-info">{{getSelectedLabel()}} {{getSelectedValue(stat)}}</span>
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
-							<a ng-repeat="i in getNumber(stat.finalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
+							<a ng-repeat="i in getNumber(stat.winFinalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
 							<a ng-repeat="i in getNumberGold(stat.winTot) track by $index"><i class="fa fa-star gold"></i></a>
 							<a ng-repeat="i in getNumberSilver(stat.winTot) track by $index"><i class="fa fa-star silver"></i></a>
 							<a ng-repeat="i in getNumberBronze(stat.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
+					<div class="col-md-5 col-sm-4 col-xs-5 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
 								<dt>Punti</dt>
@@ -50,10 +50,12 @@
 								<dd>{{stat.moneyProfit}}</dd>
 								<dt>Tornei</dt>
 								<dd>{{stat.matchTot}}</dd>
+								<dt>Vittorie finali</dt>
+								<dd>{{stat.winFinalTot}}</dd>
 							</dl>
 						</h5>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6 no-margin">
+					<div class="col-md-5 col-sm-4 col-xs-7 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
 								<dt>Media punti</dt>
@@ -68,6 +70,8 @@
 								<dd>{{stat.moneyProfitAvg.toFixed(2)}}</dd>
 								<dt>Quote</dt>
 								<dd>{{stat.payTot}}</dd>
+								<dt>Tavoli finali</dt>
+								<dd>{{stat.matchFinalTot}}</dd>
 							</dl>
 						</h5>
 					</div>

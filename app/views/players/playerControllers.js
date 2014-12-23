@@ -5,7 +5,7 @@ var playerControllers = angular.module('playerControllers', []);
 playerControllers.controller('playerController', ['$scope', 'playerService',
     function($scope, playerService) {
       
-      	 $scope.getPlayers =  function() {
+      	$scope.getPlayers =  function() {
             playerService.yearPlayers($scope.year, function(data) { 
                 $scope.players = data;
                 });
@@ -38,12 +38,3 @@ playerControllers.controller('playerController', ['$scope', 'playerService',
 	
 }]);
 
- 
-
-
-
- // $scope.loadBreedData = function() {
-//     katTplLoadingService.fn($scope.breed.code, function(tmpl) { //note the tmpl argument
-//         $scope.template = tmpl;
-//     });
-// }

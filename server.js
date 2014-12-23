@@ -62,11 +62,12 @@ var apiRouter = express.Router(); 				// get an instance of the express Router
 //apiRouter.delete('/tournaments/:id', rpt.deleteTournaments);
 //apiRouter.put('/tournaments/:id', rpt.updateTournaments);
 
-apiRouter.get('/tournament', rpt.getLastTournament);
 apiRouter.get('/tournaments/:y', rpt.getYearTournaments);
+apiRouter.get('/tournament-final/:y', rpt.getFinalYearTournament);
+apiRouter.get('/tournament-locatiions', rpt.getTournamentLocations);
 
 apiRouter.get('/players', rpt.getAllPlayers);
-apiRouter.get('/players/:y', rpt.getYearPlayers);
+apiRouter.get('/players/:y', rpt.getYearRankPlayers);
 
 apiRouter.get('/stats/:yFrom/:yTo/:type', rpt.getStats);
 apiRouter.get('/stat-types', rpt.getStatTypes);

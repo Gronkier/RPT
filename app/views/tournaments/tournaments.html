@@ -7,20 +7,20 @@
         <span class="input-group-addon"><i class="fa fa-search"></i></span>
       </div>
     </div>
-    <!--<div class="col-md-4 col-sm-6 col-xs-12 top10">-->
-      <!--<select class="form-control" ng-model="statTypeSelected"-->
-              <!--ng-options="statType as statType.label for statType in statTypes" ng-change="onchange(statTypeSelected)">-->
-      <!--</select>-->
-    <!--</div>-->
+    <div class="col-md-4 col-sm-6 col-xs-12 top10">
+      <select class="form-control" ng-model="yearSelected"
+              ng-options="year as year for year in years" ng-change="onchange(yearSelected)">
+      </select>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
       <div class="well well-sm" ng-repeat="tournament in tournaments | filter:query">
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
             <h4 class="top0">
-              <span class="label label-primary"><a ng-hide="!tournament.final"><i class="fa fa-trophy gold"></i></a><a ng-hide="tournament.final"><i class="fa fa-star bronze"></i></a>  {{tournament.date | date: 'dd-MM-yyyy'}}  {{tournament.details.location}}</span>
+              <span class="label label-primary"><a ng-hide="tournament.details.final==0"><i class="fa fa-trophy gold"></i></a><a ng-hide="tournament.details.final==1"><i class="fa fa-star bronze"></i></a>  {{tournament.date | date: 'dd-MM-yyyy'}}  {{tournament.details.location}}</span>
               <span class="label label-primary">Tavoli {{tournament.details.tables}}  Giocatori {{tournament.results.length}}</span>
             </h4>
           </div>
@@ -29,7 +29,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
             <div class="thumbnail">
               <div class="row">
-                <div class="col-md-4 col-sm-4 col-xs-5 no-margin">
+                <div class="col-md-1 col-sm-1 col-xs-5 no-margin">
                   <div class="thumbnail width80"  href="#/players/{{stat._id}}">
                     <span ng-hide="result.pos>1" class="label label-success width-max">{{result.pos}} {{result.player_id}}</span>
                     <span ng-hide="result.pos==1" class="label label-default width-max">{{result.pos}} {{result.player_id}}</span>

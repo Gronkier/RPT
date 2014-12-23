@@ -4,14 +4,18 @@
 angular.module('rptApp', [
 	'ngRoute',
 	'navbarControllers',
+
 	'playerServices',
 	'statServices',
 	'headsupServices',
 	'tournamentServices',
+	'commonServices',
+
 	'playerControllers',
 	'statControllers',
 	'headsupControllers',
-	'tournamentControllers'
+	'tournamentControllers',
+	'seasonControllers'
 	])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
@@ -30,9 +34,13 @@ angular.module('rptApp', [
 			.when('/tournaments', { 
 				templateUrl: 'views/tournaments/tournaments.html', 
 				controller: 'tournamentController'
-				})/*
-			.when('/tournament/:tournamentId', { 
-				templateUrl: 'views/tournamentEdit.html', 
+				})
+			 .when('/seasons', {
+			 templateUrl: 'views/seasons/seasons.html',
+			 controller: 'seasonController'
+		 })/*
+			.when('/tournament/:tournamentId', {
+				templateUrl: 'views/tournamentEdit.html',
 				controller: tournamentEditCtrl  
 				})*/
 			// If invalid route, just redirect to the main list view

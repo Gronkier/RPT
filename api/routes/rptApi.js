@@ -6,6 +6,7 @@ var BSON = mongo.BSONPure;
 
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
+	
 var db = null;
 var mongoClient = mongo.MongoClient;
 mongoClient.connect(uri, {}, function(error, database){       
@@ -38,13 +39,13 @@ exports.findTournaments = function(req, res) {
     });
 };
 
-exports.addTournaments = function(req, res) {
+exports.addTournament = function(req, res) {
     var tournament = req.body;
     console.log('Adding tournament: ' + JSON.stringify(tournament));
     db.collection('tournaments', function(err, collection) {
         collection.insert(tournament, {safe:true}, function(err, result) {
             if (err) {
-                res.send({'error':'An error has occurred'});
+                res.send({'error':err.message});
             } else {
                 console.log('Success: ' + JSON.stringify(result[0]));
                 res.send(result[0]);
@@ -100,16 +101,22 @@ exports.getYearTournaments = function(req, res) {
 	});
 };
 
-exports.getLastTournament = function(req, res) {
+exports.getFinalYearTournament = function(req, res) {
+	var y = req.params.y;
 	db.collection('tournaments', function(err, collection) {
-		collection.find({}, {'limit':1, 'sort':[['date','desc']]}).toArray(function(err, results) {
+		collection.find( {$and:[{'year': parseInt(y)},{'details.final': 1}]}, {'limit':1, 'sort':[['date','desc']]}).toArray(function(err, results) {
 			res.json(results);
 		});
 	});
 };
 
-
-
+exports.getTournamentLocations = function(req, res) {
+	db.collection('tournaments', function(err, collection) {
+		collection.distinct('details.location', function(err, results) {
+			res.json(results);
+		});
+	});
+};
 
 
 
@@ -132,19 +139,24 @@ exports.getStats = function(req, res) {
 					moneyTot:{$sum: '$results.money'},
 					moneyAvg:{$avg: '$results.money'},
 					payTot:{$sum: '$results.pay'},
-					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
+					winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
+					winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
 					headsupTot:{$sum: {$cond: [{$or:[{$eq:['$results.pos', 1]},{$eq:['$results.pos', 2]}]}, 1, 0 ]}},
 					//headsupTrend:{$sum: {$cond: [{$lte:['$results.pos', 2]},
 					//	                  {$cond: [{$eq:['$results.pos', 1]},
 					//					  {$cond: [{$lte:['$headsupTrend', 0]}, -'$headsupTrend' +1, +1 ]},
 					//					  {$cond: [{$gte:['$headsupTrend', 0]}, -'$headsupTrend' -1, -1 ]}
 					//					  ]},0]}},
-					matchTot:{$sum: 1}
+					matchTot:{$sum: 1},
+					matchFinalTot:{$sum: {$cond: [{$eq:['$details.final', 1]}, 1, 0 ]}}
 					}},
 		    {$project : {
 					_id: 1, 
 					pointsTot: 1,
-					pointsAvg:1,
+					matchTot:1,
+					matchFinalTot:1,
+					pointsAvg:{ $divide:["$pointsTot",{ $subtract: [ "$matchTot", "$matchFinalTot" ]}]},
+					winFinalTot: 1,
 					winTot: 1,
 					winPerc : { $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]},
 					headsupTot : 1,
@@ -153,7 +165,6 @@ exports.getStats = function(req, res) {
 					moneyAvg:1,
 					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
 					moneyProfitAvg: { $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]},
-				 	matchTot:1,
 					payTot: 1
 					//headsupTrend : 1
 					}},
@@ -169,6 +180,7 @@ exports.getStatTypes = function(req, res) {
 	var statTypes = [
 						{type:'pointsTot', label:'Punti'},
 						{type:'pointsAvg', label:'Media punti'},
+						{type:'winFinalTot', label:'Vittorie finali'},
 						{type:'winTot', label:'Vittorie'},
 						{type:'winPerc', label:'Percentuale vittorie'},
 						{type:'headsupTot', label:'Headsup'},
@@ -178,6 +190,7 @@ exports.getStatTypes = function(req, res) {
 						{type:'moneyProfit', label:'Profitti'},
 						{type:'moneyProfitAvg', label:'Media profitti'},
 						{type:'matchTot', label:'Tornei'},
+						{type:'matchFinalTot', label:'Tavoli finali'},
 						{type:'payTot', label:'Quote'}
 					];
 	res.send(statTypes);
@@ -188,40 +201,58 @@ exports.getStatTypes = function(req, res) {
 
 
 
-exports.getAllPlayers = function(req, res) {	
-    var y = req.params.y;	
-    //console.log('Retrieving players: ' + y);
-    db.collection('tournaments', function(err, collection) {
-		collection.aggregate([
-			{$match : {year : parseInt(y)}},
-		    {$unwind:'$results'},
-		    {$group: { 
-					_id:'$results.player_id',
-					pointsTot:{$sum: '$results.points'},
-					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
-					winFinalTot:{$sum: {$cond: [ {$and: [{$eq:['$results.pos', 1]}, {$eq:['$details.final', 1]}]}, 1, 0 ]}},
-					matchTot:{$sum: 1}
-					}},
-		    {$project : {
-					_id: 1, 
-					pointsTot: 1,
-					winTot: 1,
-					winFinalTot: 1,
-					matchTot:1
-					}},
-			{$sort : {
-					winFinalTot:-1,
-					winTot:-1,
-					pointsTot:-1
-					}}
-		    ],function(err, results) {
-			//var players = {players:results};
-			res.json(results);
-        });
-    });
+exports.getAllPlayerFiles = function(req, res) {
+
+	var getAllFilesFromFolder = function(dir) {
+		var filesystem = require("fs");
+		var players = [];
+
+		filesystem.readdirSync(dir).forEach(function(file) {
+			var player = file.slice(0, -4);
+			file = dir+'/'+file;
+			var stat = filesystem.statSync(file);
+
+			if (stat && stat.isDirectory()) {
+				file = file.concat(_getAllFilesFromFolder(file))
+			} else players.push(player);
+
+		});
+		return players;
+	};
+
+	var results = getAllFilesFromFolder(__dirname + "/../.." + "/app/resources/players");
+	res.json(results);
 };
 
-exports.getYearPlayers = function(req, res) {	
+exports.getAllPlayers = function(req, res) {
+
+	db.collection('tournaments', function(err, collection) {
+		collection.aggregate([
+			{$unwind:'$results'},
+			{$group: {
+				_id:'$results.player_id',
+				matchTot:{$sum: 1}
+			}},
+			{$project : {
+				_id: 1,
+				matchTot:1
+			}},
+			{$sort : {
+				matchTot:-1
+			}}
+		],function(err, results) {
+
+			var players = [];
+			for (i = 0; i < results.length; i++) {
+				players.push(results[i]._id);
+			}
+
+			res.json(players);
+		});
+	});
+};
+
+exports.getYearRankPlayers = function(req, res) {
     var y = req.params.y;	
     //console.log('Retrieving players: ' + y);
     db.collection('tournaments', function(err, collection) {
@@ -231,13 +262,15 @@ exports.getYearPlayers = function(req, res) {
 		    {$group: { 
 					_id:'$results.player_id',
 					pointsTot:{$sum: '$results.points'},
-					winTot:{$sum: {$cond: [ {$eq:['$results.pos', 1]}, 1, 0 ]}},
+					winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
+					winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
 					stack:{$sum: 0},
 					pos:{$sum: 0}
 					}},
 		    {$project : {
 					_id: 1, 
 					pointsTot: 1,
+					winFinalTot: 1,
 					winTot: 1,
 					stack: 1,
 					pos: 1
