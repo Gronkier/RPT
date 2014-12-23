@@ -2,7 +2,7 @@
 
 var serviceHeadsup = angular.module('headsupServices', []);
 var port = '';
-var port = '3003';
+//var port = '3003';
 
 serviceHeadsup.factory('headsupService', ['$http', '$location', function($http, $location){
 
