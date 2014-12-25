@@ -7,10 +7,13 @@
         <span class="input-group-addon"><i class="fa fa-search"></i></span>
       </div>
     </div>-->
-    <div class="col-md-4 col-sm-6 col-xs-12 top10">
-      <select class="form-control" ng-model="yearSelected"
-              ng-options="year as year for year in years" ng-change="onchange(yearSelected)">
-      </select>
+    <div class="col-md-3 col-sm-6 col-xs-12 top10">
+      <div class="input-group" align="right">
+        <span class="input-group-addon">Stagione</span>
+        <select class="form-control" ng-model="yearSelected"
+                ng-options="year as year for year in years" ng-change="onchange(yearSelected)">
+        </select>
+      </div>
     </div>
   </div>
 

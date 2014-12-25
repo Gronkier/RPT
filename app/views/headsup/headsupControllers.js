@@ -8,23 +8,30 @@ headsupControllers.controller('headsupController', ['$scope', 'headsupService', 
 		$scope.getYears =  function() {
 			commonService.years(function(data) {
 				$scope.years = data;
-				$scope.yearSelected = $scope.years[0];
+				$scope.yearFromSelected = $scope.years[0];
+				$scope.yearToSelected = $scope.years[$scope.years.length-1];
 			});
 		};
 
 		$scope.getHeadsups =  function() {
-			headsupService.headsups($scope.yearSelected,function(data) {
+			headsupService.headsups($scope.yearFromSelected, $scope.yearToSelected,function(data) {
 				$scope.headsups = data;
 			});
 		};
 
 
 
-		$scope.getYearSelectedLabel = function() {
-			return $scope.yearSelected;
+		$scope.getYearFromSelectedLabel = function() {
+			return $scope.yearFromSelected;
 		};
-		$scope.getYearSelectedValue = function(stat) {
-			return $scope.yearSelected;
+		$scope.getYearFromSelectedValue = function(stat) {
+			return $scope.yearFromSelected;
+		};
+		$scope.getYearToSelectedLabel = function() {
+			return $scope.yearToSelected;
+		};
+		$scope.getYearToSelectedValue = function(stat) {
+			return $scope.yearToSelected;
 		};
 
 
@@ -34,8 +41,12 @@ headsupControllers.controller('headsupController', ['$scope', 'headsupService', 
 		$scope.getHeadsups();
 
 		//Events
-		$scope.onchange = function(year) {
-			$scope.yearSelected = year;
+		$scope.onchangeYearFrom = function(year) {
+			$scope.yearFromSelected = year;
+			$scope.getHeadsups();
+		};
+		$scope.onchangeYearTo = function(year) {
+			$scope.yearToSelected = year;
 			$scope.getHeadsups();
 		};
 

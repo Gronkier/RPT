@@ -2,16 +2,8 @@
 
 var statControllers = angular.module('statControllers', []);
 
-statControllers.controller('statController', ['$scope', 'statService',
-    function($scope, statService) {
-      
-      	 $scope.getStats =  function() {
-            statService.stats($scope.yFrom, $scope.yTo, $scope.type, function(data) { 
-                $scope.stats = data;
-                });
-        };
-
-
+statControllers.controller('statController', ['$scope', 'statService', 'commonService',
+    function($scope, statService, commonService) {
 
         $scope.getStatTypes =  function() {
             statService.statTypes(function(data) {
@@ -20,6 +12,35 @@ statControllers.controller('statController', ['$scope', 'statService',
             });
         };
 
+        $scope.getYears =  function() {
+            commonService.years(function(data) {
+                $scope.years = data;
+                $scope.yearFromSelected = $scope.years[0];
+                $scope.yearToSelected = $scope.years[$scope.years.length-1];
+            });
+        };
+
+        $scope.getStats =  function() {
+            statService.stats($scope.yearFromSelected, $scope.yearToSelected, $scope.type, function(data) {
+                $scope.stats = data;
+            });
+        };
+
+
+
+
+        $scope.getYearFromSelectedLabel = function() {
+            return $scope.yearFromSelected;
+        };
+        $scope.getYearFromSelectedValue = function(stat) {
+            return $scope.yearFromSelected;
+        };
+        $scope.getYearToSelectedLabel = function() {
+            return $scope.yearToSelected;
+        };
+        $scope.getYearToSelectedValue = function(stat) {
+            return $scope.yearToSelected;
+        };
 
 
         $scope.getNumber = function(num) {
@@ -60,14 +81,23 @@ statControllers.controller('statController', ['$scope', 'statService',
         //   $scope.mainImageUrl = imageUrl;
         // };
 
-        $scope.yFrom = new Date().getFullYear();
-        $scope.yTo = $scope.yFrom;
-        $scope.type = 'pointsTot';
-        $scope.getStats();
+
+        //Init
         $scope.getStatTypes();
+        $scope.type = 'pointsTot';
+        $scope.getYears();
+        $scope.getStats();
 
-
-        $scope.onchange = function(type) {
+        //Events
+        $scope.onchangeYearFrom = function(year) {
+            $scope.yearFromSelected = year;
+            $scope.getHeadsups();
+        };
+        $scope.onchangeYearTo = function(year) {
+            $scope.yearToSelected = year;
+            $scope.getHeadsups();
+        };
+        $scope.onchangeStat = function(type) {
            // $scope.statTypeSelected = type;
         };
         //$scope.orderProp =  $scope.statTypes[0];

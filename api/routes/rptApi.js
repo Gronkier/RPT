@@ -6,7 +6,8 @@ var BSON = mongo.BSONPure;
 
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
-	
+
+
 var db = null;
 var mongoClient = mongo.MongoClient;
 mongoClient.connect(uri, {}, function(error, database){       
@@ -301,11 +302,18 @@ exports.getYearRankPlayers = function(req, res) {
 
 
 exports.getHeadsups = function(req, res) {
-	//var y = req.params.y;
+	var yFrom = req.params.yFrom;
+	var yTo = req.params.yTo;
 	//console.log('Retrieving players: ' + y);
 	//var y = req.params.y;
 	db.collection('tournaments', function(err, collection) {
-		collection.find({"results.pos":{$lte:2}}, {fields:{"results.player_id":1,"results.pos":1}}).toArray(function(err, results) {
+		collection.find( {$and:[
+			{"results.pos":{$lte:2}} ,
+			{$and:[
+				{"year":{$gte:parseInt(yFrom)}},
+				{"year":{$lte:parseInt(yTo)}}]
+			}]},
+			{fields:{"results.player_id":1,"results.pos":1}}).toArray(function(err, results) {
 			var headsups = [];
 			for (i = 0; i < results.length; i++) {
 				var headsup = {

@@ -10,10 +10,10 @@ serviceHeadsup.factory('headsupService', ['$http', '$location', function($http, 
   var host = $location.host();
 
   return {
-    headsups: function(year, callback) {
+    headsups: function(yFrom, yTo, callback) {
       $http({ method: 'GET',
         //url: 'http://localhost:3003/api/headsups'
-        url: protocol.concat(host,':', port, '/api/headsups')
+        url: protocol.concat(host,':', port, '/api/headsups/',yFrom, '/',yTo)
       })
           .success(function(data) {
             console.log(data);
