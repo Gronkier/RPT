@@ -91,11 +91,11 @@ statControllers.controller('statController', ['$scope', 'statService', 'commonSe
         //Events
         $scope.onchangeYearFrom = function(year) {
             $scope.yearFromSelected = year;
-            $scope.getHeadsups();
+            $scope.getStats();
         };
         $scope.onchangeYearTo = function(year) {
             $scope.yearToSelected = year;
-            $scope.getHeadsups();
+            $scope.getStats();
         };
         $scope.onchangeStat = function(type) {
            // $scope.statTypeSelected = type;

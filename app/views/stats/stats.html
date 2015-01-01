@@ -19,7 +19,7 @@
 			<div class="input-group" align="right">
 				<span class="input-group-addon">Da</span>
 				<select class="form-control" ng-model="yearFromSelected"
-						ng-options="year as year for year in years" ng-change="onchange(yearFromSelected)">
+						ng-options="year as year for year in years" ng-change="onchangeYearFrom(yearFromSelected)">
 				</select>
 			</div>
 		</div>
@@ -27,7 +27,7 @@
 			<div class="input-group" align="right">
 				<span class="input-group-addon">A</span>
 				<select class="form-control" ng-model="yearToSelected"
-						ng-options="year as year for year in years" ng-change="onchange(yearToSelected)">
+						ng-options="year as year for year in years" ng-change="onchangeYearTo(yearToSelected)">
 				</select>
 			</div>
 		</div>
