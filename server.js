@@ -76,10 +76,15 @@ apiRouter.get('/headsups/:yFrom/:yTo', rpt.getHeadsups);
 
 app.use('/api', apiRouter); // all routes will be prefixed with /api
 
+// admin call
+var adminRouter = express.Router(); 				// get an instance of the express Router
+adminRouter.get('/*', function(req, res) {res.sendFile(__dirname + '/app/admin.html'); });   // load the single view file (angular will handle the page changes on the front-end)
+app.use('/adm', adminRouter); // all routes will be prefixed with /admin
+
 // app call
 var appRouter = express.Router(); 				// get an instance of the express Router
 appRouter.get('/*', function(req, res) {res.sendFile(__dirname + '/app/index.html'); });   // load the single view file (angular will handle the page changes on the front-end)
-app.use('/', appRouter); // all routes will be prefixed with /api
+app.use('/', appRouter);
 
 
 // START THE SERVER

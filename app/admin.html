@@ -1,0 +1,72 @@
+<!doctype html>
+
+<!-- ASSIGN ANGULAR MODULE -->
+<html lang="it">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Reda Poker Tour</title>
+
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+		<link rel="stylesheet" href="bower_components/Font-Awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/app.css">
+
+		<script src="bower_components/jquery/jquery.js"></script>
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>-->
+		<script src="bower_components/angular-route/angular-route.js"></script>
+		<script src="bower_components/angular-resource/angular-resource.js"></script>
+
+
+		<script src="routes/rptAdmin.js"></script>
+		<script src="admin/navbar/navbarControllers.js"></script>
+		<script src="admin/tournaments/tournamentControllers.js"></script>
+		<script src="admin/players/playerControllers.js"></script>
+		<script src="admin/locations/locationControllers.js"></script>
+		<script src="admin/news/newControllers.js"></script>
+
+
+		<script src="admin/common/commonServices.js"></script>
+		<script src="admin/tournaments/tournamentServices.js"></script>
+		<script src="admin/players/playerServices.js"></script>
+		<script src="admin/locations/locationServices.js"></script>
+		<script src="admin/news/newServices.js"></script>
+
+
+	</head>
+	<body ng-app="rptAdmin">
+	
+		<!-- NAVIGATION -->
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+
+				<div class="navbar-header">
+					<button class="navbar-toggle collapsed" type="button"  data-toggle="collapse" data-target="#navbarRPT">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/adm"><img src="resources/logo/logo5.png" height="20"></a>
+				</div>
+
+				<div ng-controller="navbarController" class="collapse navbar-collapse" id="navbarRPT">
+					<ul class="nav navbar-nav">
+						<li ng-class="{ active: isActive('/tournaments')}"><a href="#/tournaments"><i class="fa fa-calendar"></i> Tornei<span class="sr-only">(current)</span></a></li>
+						<li ng-class="{ active: isActive('/players')}"><a href="#/players"><i class="fa fa-users"></i> Giocatori</a></li>
+						<li ng-class="{ active: isActive('/locations')}"><a href="#/locations"><i class="fa fa-globe"></i> Luoghi</a></li>
+						<li ng-class="{ active: isActive('/news')}"><a href="#/news"><i class="fa fa-comment"></i> News</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</nav>
+
+		<div class="container">
+			<div ng-view ></div>
+		</div>
+
+	</body>
+</html>
