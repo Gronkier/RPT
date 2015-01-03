@@ -22,6 +22,14 @@ angular.module('rptAdmin', [
 				templateUrl: 'admin/tournaments/tournaments.html',
 				controller: 'tournamentController'
 			})
+			.when('/tournamentNew', {
+				templateUrl: 'admin/tournaments/tournamentEdit.html',
+				controller: 'tournamentController'
+			})
+			.when('/tournamentEdit/id', {
+				templateUrl: 'admin/tournaments/tournamentEdit.html',
+				controller: 'tournamentController'
+			})
 			.when('/players', { 
 				templateUrl: 'admin/players/players.html',
 				controller: 'playerController'

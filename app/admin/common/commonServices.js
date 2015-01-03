@@ -12,7 +12,6 @@ serviceCommon.factory('commonService', ['$http', '$location', function($http, $l
   return {
 
     years: function(callback) {
-
         var yearFrom = new Date(2014, 1, 1, 0, 0, 0, 0).getFullYear();
         var yearTo = new Date().getFullYear();
         var year = yearFrom;
@@ -21,7 +20,19 @@ serviceCommon.factory('commonService', ['$http', '$location', function($http, $l
             years.push(year);
             year++;
         }
-        callback(years);
+    callback(years);
+    },
+
+    locations: function(callback) {
+        var yearFrom = new Date(2014, 1, 1, 0, 0, 0, 0).getFullYear();
+        var yearTo = new Date().getFullYear();
+        var year = yearFrom;
+        var years = [];
+        while (year <= yearTo) {
+          years.push(year);
+          year++;
+        }
+      callback(years);
     }
 
   }}]);

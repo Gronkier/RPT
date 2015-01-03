@@ -2,8 +2,8 @@
 
 var tournamentControllers = angular.module('tournamentControllers', []);
 
-tournamentControllers.controller('tournamentController', ['$scope', 'tournamentService', 'commonService',
-	function($scope, tournamentService, commonService) {
+tournamentControllers.controller('tournamentController', ['$scope', '$location', 'tournamentService', 'commonService',
+	function($scope, $location, tournamentService, commonService) {
 
 		$scope.getYears =  function() {
 			commonService.years(function(data) {
@@ -24,6 +24,15 @@ tournamentControllers.controller('tournamentController', ['$scope', 'tournamentS
 		$scope.getYearSelectedValue = function(stat) {
 			return $scope.yearSelected;
 		};
+
+
+		$scope.newTournament = function() {
+			$location.path( '/tournamentNew' );
+		};
+		$scope.editTournament = function(tournamentId) {
+			$location.path( '/tournamentEdit/tournamentId' );
+		};
+
 
 		//Init
 		$scope.getYears();

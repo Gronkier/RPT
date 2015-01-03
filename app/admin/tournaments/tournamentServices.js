@@ -25,7 +25,7 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
           });
     },
 
-      finalYearTournament: function(year, callback) {
+      getTournamentById: function(id, callback) {
       $http({ method: 'GET',
         //url: 'http://localhost:3003/api/tournament'
         url: protocol.concat(host,':', port, '/api/tournament-final/', year)
@@ -38,7 +38,23 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
             console.log('Error: ' + data);
             callback(data);
           });
-    }
+    },
+
+      saveTournament: function(id, callback) {
+          $http({ method: 'POST',
+              //url: 'http://localhost:3003/api/tournament'
+              url: protocol.concat(host,':', port, '/api/tournament-final/', year)
+          })
+              .success(function(data) {
+                  console.log(data);
+                  callback(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+                  callback(data);
+              });
+      }
+
 
   }}]);
 
