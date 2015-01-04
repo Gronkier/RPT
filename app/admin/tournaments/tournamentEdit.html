@@ -2,10 +2,10 @@
 
   <div class="row bottom10">
     <div class="col-md-2 col-sm-2 col-xs-6 top10">
-      <button type="button" class="btn btn-primary pull-left"  ng-click="saveTournament()"><i class="fa fa-check"></i></button>
+      <button type="button" class="btn btn-primary pull-left width-max"  ng-click="saveTournament()">Salva</button>
     </div>
     <div class="col-md-2 col-sm-2 col-xs-6 top10">
-      <button type="button" class="btn btn-primary pull-left"  ng-click="cancel()"><i class="fa fa-remove"></i></button>
+      <button type="button" class="btn btn-primary pull-left width-max"  ng-click="cancel()">Annulla</button>
     </div>
   </div>
 
@@ -39,7 +39,10 @@
       <div class="col-md-4 col-sm-4 col-xs-12 top10">
         <div class="input-group" align="right">
           <span class="input-group-addon">Finale</span>
-          <input class="form-control" ng-Model="editTournament.details.final" type="text"  placeholder="">
+          <!--<span class="input-group-addon">Finale <a ng-hide="editTournament.details.final=0"><i class="fa fa-trophy gold"></i></a><a ng-hide="editTournament.details.final=1"><i class="fa fa-star bronze"></i></a></span>-->
+          <select class="form-control" ng-model="editTournament.details.final"
+                  ng-options="finalValue.value as finalValue.label for finalValue in finalValues">
+          </select>
         </div>
       </div>
 
@@ -49,7 +52,7 @@
 
       <div class="col-md-3 col-sm-3 col-xs-12 top10">
         <div class="input-group" align="right">
-          <span class="input-group-addon">Stagione</span>
+          <span class="input-group-addon"><i class="fa fa-user"></i></span>
           <select class="form-control" ng-model="result.player_id"
                   ng-options="player as player for player in players">
           </select>
@@ -69,18 +72,25 @@
           <input class="form-control" ng-Model="result.money" type="text"  placeholder="">
         </div>
       </div>
-      
-      <div class="col-md-3 col-sm-3 col-xs-12 top10">
+
+      <div class="col-md-2 col-sm-2 col-xs-12 top10">
         <div class="input-group" align="right">
           <span class="input-group-addon">Quota</span>
           <input class="form-control" ng-Model="result.pay" type="text"  placeholder="">
         </div>
       </div>
 
+      <div class="col-md-1 col-sm-1 col-xs-12 top10">
+        <button type="button" class="btn btn-primary pull-right"  ng-click="removeResult(result)"><i class="fa fa-remove"></i></button>
+      </div>
+
     </div>
 
-
-
+    <div class="row bottom10">
+      <div class="col-md-1 col-md-offset-11 col-sm-1 col-sm-offset-11 col-xs-12 top10">
+        <button type="button" class="btn btn-primary pull-right"  ng-click="newResult()"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
 
   </div>
 </div>
