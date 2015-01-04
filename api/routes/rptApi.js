@@ -219,6 +219,15 @@ exports.getFinalYearTournament = function(req, res) {
 	});
 };
 
+exports.getTournamentById = function(req, res) {
+	var id = req.params.id;
+	db.collection('tournaments', function(err, collection) {
+		collection.find( {'_id': parseInt(id)}, {'limit':1}).toArray(function(err, results) {
+			res.json(results);
+		});
+	});
+};
+
 exports.getTournamentLocations = function(req, res) {
 	db.collection('tournaments', function(err, collection) {
 		collection.distinct('details.location', function(err, results) {

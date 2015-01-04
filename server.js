@@ -64,6 +64,7 @@ var apiRouter = express.Router(); 				// get an instance of the express Router
 
 apiRouter.get('/tournaments/:y', rpt.getYearTournaments);
 apiRouter.get('/tournament-final/:y', rpt.getFinalYearTournament);
+apiRouter.get('/tournament/:id', rpt.getTournamentById);
 apiRouter.get('/tournament-locations', rpt.getTournamentLocations);
 
 apiRouter.get('/players', rpt.getAllPlayers);

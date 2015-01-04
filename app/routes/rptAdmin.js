@@ -14,7 +14,8 @@ angular.module('rptAdmin', [
 	'playerControllers',
 	'newControllers',
 	'locationControllers',
-	'tournamentControllers'
+	'tournamentControllers',
+	'tournamentEditControllers'
 	])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
@@ -22,13 +23,9 @@ angular.module('rptAdmin', [
 				templateUrl: 'admin/tournaments/tournaments.html',
 				controller: 'tournamentController'
 			})
-			.when('/tournamentNew', {
+			.when('/tournamentEdit', {
 				templateUrl: 'admin/tournaments/tournamentEdit.html',
-				controller: 'tournamentController'
-			})
-			.when('/tournamentEdit/id', {
-				templateUrl: 'admin/tournaments/tournamentEdit.html',
-				controller: 'tournamentController'
+				controller: 'tournamentEditController'
 			})
 			.when('/players', { 
 				templateUrl: 'admin/players/players.html',

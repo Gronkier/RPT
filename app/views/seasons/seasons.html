@@ -30,13 +30,11 @@
           </div>
         </div>
         <div class="row" >
-          <div class="col-md-12 col-sm-12 col-xs-12 no-margin">
-            <div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="result in finalTournament.results">
-              <div class="thumbnail width80"  href="#/players/{{stat._id}}">
-                <span ng-hide="result.pos>1" class="label label-success width-max">{{result.pos}} {{result.player_id}}</span>
-                <span ng-hide="result.pos==1" class="label label-default width-max">{{result.pos}} {{result.player_id}}</span>
-                <img class="width80" ng-src="resources/players/{{result.player_id}}.jpg">
-              </div>
+          <div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="result in finalTournament.results">
+            <div class="thumbnail width80 no-margin"  href="#/players/{{stat._id}}">
+              <span ng-hide="result.pos>1" class="label label-success width-max">{{result.pos}} {{result.player_id}}</span>
+              <span ng-hide="result.pos==1" class="label label-default width-max">{{result.pos}} {{result.player_id}}</span>
+              <img class="width80" ng-src="resources/players/{{result.player_id}}.jpg">
             </div>
           </div>
         </div>

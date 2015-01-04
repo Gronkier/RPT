@@ -4,7 +4,7 @@
 		<div class="col-md-4 col-sm-6 col-xs-10 top10">
 			<div class="input-group" align="right">
 				<span class="input-group-addon">Giocatore</span>
-				<input class="form-control" ng-Model="newPlayer" type="text"  placeholder="inserisci nuovo giocatore">
+				<input class="form-control" ng-Model="newPlayer" type="text"  placeholder="nome giocatore">
 			</div>
 		</div>
 		<div class="col-md-2 col-sm-2 col-xs-2 top10">
@@ -14,12 +14,10 @@
 
 	<div class="well well-sm">
 		<div class="row" >
-			<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
-				<div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="player in players">
-					<div class="thumbnail width80"  ng-click="addPlayer(player)">
-						<span class="label label-primary width-max">{{player}}</span>
-						<img class="width80" ng-src="resources/players/{{player}}.jpg">
-					</div>
+			<div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="player in players">
+				<div class="thumbnail width80 no-margin"  ng-click="addPlayer(player)">
+					<span class="label label-primary width-max">{{player}}</span>
+					<img class="width80" ng-src="resources/players/{{player}}.jpg">
 				</div>
 			</div>
 		</div>

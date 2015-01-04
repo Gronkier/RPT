@@ -2,37 +2,41 @@
 
 var tournamentEditControllers = angular.module('tournamentEditControllers', []);
 
-tournamentEditControllers.controller('tournamentEditController', ['$scope', '$location', 'tournamentService', 'commonService',
-	function($scope, $location, tournamentService, commonService) {
+tournamentEditControllers.controller('tournamentEditController', ['$scope', '$location', 'tournamentService', 'playerService', 'locationService', 'commonService',
+	function($scope, $location, tournamentService, playerService, locationService, commonService) {
 
 
-		$scope.getYearTournaments =  function() {
-			tournamentService.yearTournaments($scope.yearSelected, function(data) {
-				$scope.tournaments = data;
+		$scope.init =  function() {
+			locationService.locations(function(data) {
+				$scope.locations = data;
+			});
+			playerService.players(function(data) {
+				$scope.players = data;
+			});
+			tournamentService.newId(function(data) {
+				$scope.newId = data;
+				$scope.getEditTournament();
+			});
+		};
+		$scope.getEditTournament =  function() {
+			tournamentService.editTournament(function(data) {
+				$scope.editTournament = data;
 			});
 		};
 
-		$scope.getTournamentById =  function() {
-			var url = $location.url();
-			tournamentService.yearTournaments($scope.yearSelected, function(data) {
-				$scope.tournaments = data;
-			});
-		};
-		$scope.getTournamentById =  function() {
-			tournamentService.yearTournaments($scope.yearSelected, function(data) {
-				$scope.tournaments = data;
+		$scope.saveTournament =  function() {
+			tournamentService.saveTournament($scope.editTournament, function(data) {
+				$location.path( '/tournaments' );
 			});
 		};
 
 
 		//Init
-		$scope.getTournamentById();
-		$scope.getYearTournaments();
+		$scope.init();
 
 		//Events
 		$scope.saveTournament = function() {
-			//save tournamentService.save();
-			$location.path( '/tournaments' );
+			$scope.saveTournament();
 		};
 		$scope.cancel = function(tournamentId) {
 			$location.path( '/tournaments' );
