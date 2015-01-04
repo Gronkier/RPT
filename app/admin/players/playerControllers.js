@@ -10,10 +10,16 @@ playerControllers.controller('playerController', ['$scope', 'playerService',
                 $scope.players = data;
             });
         };
-        $scope.addPlayer =  function(player) {
-            $scope.players.push(player);
+        $scope.addPlayer =  function() {
+            if ($scope.newPlayer) {
+                if($scope.players.indexOf($scope.newPlayer)== -1){
+                    $scope.players.push($scope.newPlayer);
+                    playerService.addPlayer($scope.newPlayer);
+                }
+            }
         };
 
+        $scope.newLocation;
 
         //init
         $scope.getPlayers();

@@ -1,22 +1,22 @@
 <div class="container-fluid">
 
 	<div class="row bottom10">
-		<div class="col-md-3 col-sm-6 col-xs-10 top10">
+		<div class="col-md-4 col-sm-6 col-xs-10 top10">
 			<div class="input-group" align="right">
-				<span class="input-group-addon"><i class="fa fa-search"></i></span>
-				<input class="form-control" ng-model="query" type="text"  placeholder="Cerca">
+				<span class="input-group-addon">Luogo</span>
+				<input class="form-control" ng-Model="newLocation" type="text"  placeholder="inserisci nuovo luogo">
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-6 col-xs-2 top10">
-			<button type="button" class="btn btn-primary"  ng-click="addTournament()"><i class="fa fa-plus"></i></button>
+		<div class="col-md-2 col-sm-2 col-xs-2 top10">
+			<button type="button" class="btn btn-primary pull-left"  ng-click="addLocation()"><i class="fa fa-plus"></i></button>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-6 col-sm-8 col-xs-12">
 			<div class="well well-sm">
 				<h4 class="top0">
-					<span class="label label-primary" ng-repeat="location in locations">{{location}}</span>
+					<span class="label label-primary top10" ng-repeat="location in locations">{{location}}</span>
 				</h4>
 			</div>
 		</div>

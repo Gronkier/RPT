@@ -1,49 +1,24 @@
 <div class="container-fluid">
 
 	<div class="row bottom10">
-		<div class="col-md-3 col-sm-6 col-xs-12 top10">
+		<div class="col-md-4 col-sm-6 col-xs-10 top10">
 			<div class="input-group" align="right">
-				<span class="input-group-addon"><i class="fa fa-search"></i></span>
-				<input class="form-control" ng-model="query" type="text"  placeholder="Cerca">
+				<span class="input-group-addon">Giocatore</span>
+				<input class="form-control" ng-Model="newPlayer" type="text"  placeholder="inserisci nuovo giocatore">
 			</div>
+		</div>
+		<div class="col-md-2 col-sm-2 col-xs-2 top10">
+			<button type="button" class="btn btn-primary pull-left"  ng-click="addPlayer()"><i class="fa fa-plus"></i></button>
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="well well-sm" ng-repeat="player in players | filter:query" >
-				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
-						<h4 class="top0">
-							<span class="label label-primary"><span class="badge">{{player.pos}}</span> - {{player._id}}</span>
-						</h4>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-1 col-sm-1 col-xs-12 no-margin">
-						<div class="thumbnail width100" href="#/players/{{player._id}}">
-							<img class="width100" ng-src="resources/players/{{player._id}}.jpg">
-							<a ng-repeat="i in getNumber(player.winFinalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
-							<a ng-repeat="i in getNumberGold(player.winTot) track by $index"><i class="fa fa-star gold"></i></a>
-							<a ng-repeat="i in getNumberSilver(player.winTot) track by $index"><i class="fa fa-star silver"></i></a>
-							<a ng-repeat="i in getNumberBronze(player.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
-						</div>
-					</div>
-					<div class="col-md-5 col-sm-4 col-xs-6 no-margin">
-						<h5>
-							<dl class="dl-horizontal no-margin">
-								<dt>Punti</dt>
-								<dd>{{player.pointsTot.toFixed(2)}}</dd>
-							</dl>
-						</h5>
-					</div>
-					<div class="col-md-5 col-sm-4 col-xs-6 no-margin">
-						<h5>
-							<dl class="dl-horizontal no-margin">
-								<dt>Stack finale</dt>
-								<dd>{{player.stack.toFixed(0)}}</dd>
-							</dl>
-						</h5>
+	<div class="well well-sm">
+		<div class="row" >
+			<div class="col-md-12 col-sm-12 col-xs-12 no-margin">
+				<div class="col-md-2 col-sm-3 col-xs-4 no-margin" ng-repeat="player in players">
+					<div class="thumbnail width80"  ng-click="addPlayer(player)">
+						<span class="label label-primary width-max">{{player}}</span>
+						<img class="width80" ng-src="resources/players/{{player}}.jpg">
 					</div>
 				</div>
 			</div>
@@ -51,6 +26,3 @@
 	</div>
 
 </div>
-
-
-
