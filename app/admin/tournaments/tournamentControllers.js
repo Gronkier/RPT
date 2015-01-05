@@ -27,11 +27,22 @@ tournamentControllers.controller('tournamentController', ['$scope', '$location',
 
 
 		$scope.editTournament = function(tournamentId) {
-			tournamentService.tournamentById(tournamentId, function(data) {
-				if(data.length>0) {
-					$location.path( '/tournamentEdit' );
-				}
-			});
+			if(tournamentId) {
+				tournamentService.tournamentById(tournamentId, function (data) {
+					if (data.length > 0) {
+						$location.path('/tournamentEdit');
+					}
+				});
+			}
+			else
+			{
+				tournamentService.newTournament(function (data) {
+					if (data) {
+						$location.path('/tournamentEdit');
+					}
+				});
+
+			}
 		};
 
 

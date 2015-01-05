@@ -50,8 +50,24 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
           });
       },
 
-      newId: function(callback) {
-          callback(newId);
+      newTournament: function(callback) {
+          var tournamentDate = new Date();
+          tournamentDate.setHours(-tournamentDate.getTimezoneOffset()/60);
+          tournamentDate.setMinutes(0);
+          tournamentDate.setSeconds(0);
+          tournamentDate.setMilliseconds(0);
+          editTournament={
+              "_id": newId,
+              "year": tournamentDate.getFullYear(),
+              "date": tournamentDate.toISOString(),
+              "details": {
+                  "location": "",
+                  "tables": 1,
+                  "final": 0
+              },
+              "results": []
+          };
+          callback(editTournament);
       },
 
       editTournament: function(callback) {
@@ -59,9 +75,26 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
       },
 
       saveTournament: function(tournament, callback) {
+          $http({   method: 'POST',
+                    //url: 'http://localhost:3003/api/tournament'
+                    url: protocol.concat(host,':', port, '/api/tournament-save/'),
+                    data:tournament
+          })
+              .success(function(data) {
+                  console.log(data);
+                  callback(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+                  callback(data);
+              });
+      },
+
+      deleteTournament: function(tournament, callback) {
           $http({ method: 'POST',
               //url: 'http://localhost:3003/api/tournament'
-              url: protocol.concat(host,':', port, '/api/tournament-final/')
+              url: protocol.concat(host,':', port, '/api/tournament-delete/'),
+              data:tournament
           })
               .success(function(data) {
                   console.log(data);
@@ -72,8 +105,6 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
                   callback(data);
               });
       }
-
-
   }}]);
 
 

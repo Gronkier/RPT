@@ -13,10 +13,7 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
 			playerService.players(function(data) {
 				$scope.players = data;
 			});
-			tournamentService.newId(function(data) {
-				$scope.newId = data;
-				$scope.getEditTournament();
-			});
+			$scope.getEditTournament();
 		};
 		$scope.getEditTournament =  function() {
 			tournamentService.editTournament(function(data) {
@@ -34,29 +31,25 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
 				label:'Si'
 			}];
 
-		$scope.saveTournament =  function() {
-			tournamentService.saveTournament($scope.editTournament, function(data) {
-				$location.path( '/tournaments' );
-			});
-		};
-
-
 
 		//Init
 		$scope.init();
 
 		//Events
 		$scope.saveTournament = function() {
-			$scope.saveTournament();
+			tournamentService.saveTournament($scope.editTournament, function(data) {
+				$location.path( '/tournaments' );
+			});
 		};
-		$scope.cancel = function(tournamentId) {
+
+		$scope.cancel = function() {
 			$location.path( '/tournaments' );
 		};
 
 		$scope.newResult = function() {
 			var newResult = {
 				"player_id": "",
-				"pos": $scope.editTournament.results+1,
+				"pos": $scope.editTournament.results.length+1,
 				"points": 0,
 				"money": 0,
 				"pay": 5
@@ -66,10 +59,21 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
 
 		$scope.removeResult = function(result) {
 			if (result) {
-				var index = $scope.editTournament.results.indexOf(result);
-				if(index != -1){
-					$scope.editTournament.results.splice(index,1);
+				var ind = $scope.editTournament.results.indexOf(result);
+				if(ind != -1){
+					$scope.editTournament.results.splice(ind,1);
 				}
 			}
+		};
+
+		$scope.calculate = function() {
+
+
+		};
+
+		$scope.deleteTournament = function() {
+			tournamentService.deleteTournament($scope.editTournament, function(data) {
+				$location.path( '/tournaments' );
+			});
 		};
 	}]);

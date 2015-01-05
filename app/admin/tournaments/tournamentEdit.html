@@ -1,12 +1,19 @@
 <div class="container-fluid">
 
   <div class="row bottom10">
-    <div class="col-md-2 col-sm-2 col-xs-6 top10">
+    <div class="col-md-2 col-sm-2 col-xs-4 top10">
+      <button type="button" class="btn btn-primary pull-left width-max"  ng-click="deleteTournament()">Elimina</button>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-4 top10">
+      <button type="button" class="btn btn-primary pull-left width-max"  ng-click="calculate()">Calcola</button>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-4 top10">
       <button type="button" class="btn btn-primary pull-left width-max"  ng-click="saveTournament()">Salva</button>
     </div>
-    <div class="col-md-2 col-sm-2 col-xs-6 top10">
+    <div class="col-md-2 col-sm-2 col-xs-4 top10">
       <button type="button" class="btn btn-primary pull-left width-max"  ng-click="cancel()">Annulla</button>
     </div>
+
   </div>
 
 
@@ -38,8 +45,8 @@
 
       <div class="col-md-4 col-sm-4 col-xs-12 top10">
         <div class="input-group" align="right">
-          <span class="input-group-addon">Finale</span>
-          <!--<span class="input-group-addon">Finale <a ng-hide="editTournament.details.final=0"><i class="fa fa-trophy gold"></i></a><a ng-hide="editTournament.details.final=1"><i class="fa fa-star bronze"></i></a></span>-->
+          <!--<span class="input-group-addon">Finale</span>-->
+          <span class="input-group-addon">Finale <a ng-hide="editTournament.details.final==0"><i class="fa fa-trophy gold"></i></a><a ng-hide="editTournament.details.final==1"><i class="fa fa-star bronze"></i></a></span>
           <select class="form-control" ng-model="editTournament.details.final"
                   ng-options="finalValue.value as finalValue.label for finalValue in finalValues">
           </select>
@@ -52,7 +59,7 @@
 
       <div class="col-md-3 col-sm-3 col-xs-12 top10">
         <div class="input-group" align="right">
-          <span class="input-group-addon"><i class="fa fa-user"></i></span>
+          <span class="input-group-addon"><i class="fa fa-user"></i> {{$index + 1}}</span>
           <select class="form-control" ng-model="result.player_id"
                   ng-options="player as player for player in players">
           </select>

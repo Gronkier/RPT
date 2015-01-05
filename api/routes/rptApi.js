@@ -11,7 +11,6 @@ var Db = mongo.Db;
 var BSON = mongo.BSONPure;
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
-var uri = "mongodb://MongoLab-52:A_Lw.v09UhRjTy_wkkJv0re8HZj3F6.i.7Wwz57nbFs-@ds045107.mongolab.com:45107/MongoLab-52";
 
 var db = null;
 var mongoClient = mongo.MongoClient;
@@ -150,14 +149,15 @@ exports.findTournaments = function(req, res) {
 
 exports.addTournament = function(req, res) {
     var tournament = req.body;
+	tournament.date= new Date(tournament.date);
     console.log('Adding tournament: ' + JSON.stringify(tournament));
     db.collection('tournaments', function(err, collection) {
         collection.insert(tournament, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':err.message});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                console.log('Success: ' + JSON.stringify(result));
+                res.send(result);
             }
         });
     });
@@ -181,11 +181,13 @@ exports.updateTournament = function(req, res) {
     });
 }
  
-exports.deleteTournaments = function(req, res) {
-    var id = req.params.id;
-    console.log('Deleting tournament: ' + id);
+exports.deleteTournament = function(req, res) {
+    //var id = req.params.id;
+	var tournament = req.body;
+    console.log('Deleting tournament: ' + tournament._id);
     db.collection('tournaments', function(err, collection) {
-        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+        //collection.remove({'_id':new BSON.ObjectID(tournament._id)}, {safe:true}, function(err, result) {
+		collection.remove({'_id':tournament._id}, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
             } else {
@@ -361,8 +363,10 @@ exports.getAllPlayers = function(req, res) {
 		],function(err, results) {
 
 			var players = [];
-			for (i = 0; i < results.length; i++) {
-				players.push(results[i]._id);
+			if(results) {
+				for (i = 0; i < results.length; i++) {
+					players.push(results[i]._id);
+				}
 			}
 
 			res.json(players);
