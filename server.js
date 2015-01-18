@@ -66,7 +66,7 @@ apiRouter.get('/tournaments/:y', rpt.getYearTournaments);
 apiRouter.get('/tournament-final/:y', rpt.getFinalYearTournament);
 apiRouter.get('/tournament/:id', rpt.getTournamentById);
 apiRouter.get('/tournament-locations', rpt.getTournamentLocations);
-apiRouter.post('/tournament-save', rpt.addTournament);
+apiRouter.post('/tournament-save', rpt.saveTournament);
 apiRouter.post('/tournament-delete', rpt.deleteTournament);
 
 

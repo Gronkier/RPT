@@ -12,6 +12,7 @@ var BSON = mongo.BSONPure;
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
 
+
 var db = null;
 var mongoClient = mongo.MongoClient;
 mongoClient.connect(uri, {}, function(error, database){       
@@ -125,9 +126,6 @@ mongoClient.connect(uri, {}, function(error, database){
 
 
 
-
-
-
  
 exports.getTournaments = function(req, res) {
     db.collection('tournaments', function(err, collection) {
@@ -147,22 +145,6 @@ exports.findTournaments = function(req, res) {
     });
 };
 
-exports.addTournament = function(req, res) {
-    var tournament = req.body;
-	tournament.date= new Date(tournament.date);
-    console.log('Adding tournament: ' + JSON.stringify(tournament));
-    db.collection('tournaments', function(err, collection) {
-        collection.insert(tournament, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':err.message});
-            } else {
-                console.log('Success: ' + JSON.stringify(result));
-                res.send(result);
-            }
-        });
-    });
-}
- 
 exports.updateTournament = function(req, res) {
     var id = req.params.id;
     var tournament = req.body;
@@ -176,23 +158,6 @@ exports.updateTournament = function(req, res) {
             } else {
                 console.log('' + result + ' document(s) updated');
                 res.send(tournament);
-            }
-        });
-    });
-}
- 
-exports.deleteTournament = function(req, res) {
-    //var id = req.params.id;
-	var tournament = req.body;
-    console.log('Deleting tournament: ' + tournament._id);
-    db.collection('tournaments', function(err, collection) {
-        //collection.remove({'_id':new BSON.ObjectID(tournament._id)}, {safe:true}, function(err, result) {
-		collection.remove({'_id':tournament._id}, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':'An error has occurred - ' + err});
-            } else {
-                console.log('' + result + ' document(s) deleted');
-                res.send(req.body);
             }
         });
     });
@@ -238,10 +203,73 @@ exports.getTournamentLocations = function(req, res) {
 	});
 };
 
+exports.saveTournament = function(req, res) {
+	var tournament = req.body;
+	var existingTournament;
+	tournament.date= new Date(tournament.date);
+	console.log('Save tournament: ' + JSON.stringify(tournament));
+
+	//Check id present
+	db.collection('tournaments', function(err, collection) {
+		collection.findOne({'_id':parseInt(tournament._id)}, function(err, item) {
+			existingTournament=item;
+			if(existingTournament) {
+				db.collection('tournaments', function (err, collection) {
+					collection.update({'_id':parseInt(tournament._id)}, tournament, {safe: true}, function (err, result) {
+						if (err) {
+							console.log('Error: ' + err.message);
+							res.send({'error': err.message});
+						} else {
+							console.log('Update success: ' + JSON.stringify(result));
+							res.send(result);
+						}
+					});
+				});
+			}
+			else {
+				db.collection('tournaments', function (err, collection) {
+					collection.insert(tournament, {safe: true}, function (err, result) {
+						if (err) {
+							console.log('Error: ' + err.message);
+							res.send({'error': err.message});
+						} else {
+							console.log('Insert success: ' + JSON.stringify(result));
+							res.send(result);
+						}
+					});
+				});
+			}
+		});
+	});
+}
+
+exports.deleteTournament = function(req, res) {
+	//var id = req.params.id;
+	var tournament = req.body;
+	console.log('Deleting tournament: ' + tournament._id);
+	db.collection('tournaments', function(err, collection) {
+		//collection.remove({'_id':new BSON.ObjectID(tournament._id)}, {safe:true}, function(err, result) {
+		collection.remove({'_id':tournament._id}, {safe:true}, function(err, result) {
+			if (err) {
+				res.send({'error':'An error has occurred - ' + err});
+			} else {
+				console.log('' + result + ' document(s) deleted');
+				res.send(req.body);
+			}
+		});
+	});
+}
+
+
+
+
+
+
 
 
 exports.getStats = function(req, res) {
-    var yFrom = req.params.yFrom;
+    var stats;
+	var yFrom = req.params.yFrom;
 	var yTo = req.params.yTo;
 	var type = req.params.type;		
 	var sort = { $sort : {} };
@@ -268,7 +296,11 @@ exports.getStats = function(req, res) {
 					//					  {$cond: [{$gte:['$headsupTrend', 0]}, -'$headsupTrend' -1, -1 ]}
 					//					  ]},0]}},
 					matchTot:{$sum: 1},
-					matchFinalTot:{$sum: {$cond: [{$eq:['$details.final', 1]}, 1, 0 ]}}
+					matchFinalTot:{$sum: {$cond: [{$eq:['$details.final', 1]}, 1, 0 ]}},
+					winSeries:{$sum: 0},
+					winSeriesTemp:{$sum: 0},
+					headsupSeries:{$sum: 0},
+					headsupSeriesTemp:{$sum: 0}
 					}},
 		    {$project : {
 					_id: 1, 
@@ -285,13 +317,49 @@ exports.getStats = function(req, res) {
 					moneyAvg:1,
 					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
 					moneyProfitAvg: { $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]},
-					payTot: 1
-					//headsupTrend : 1
+					payTot: 1,
+					winSeries:1,
+					winSeriesTemp:1,
+					headsupSeries:1,
+					headsupSeriesTemp:1
 					}},
 			//{$sort: {sortAction: -1, pointsTot: -1, moneyTot: -1}}
 			sort
 		    ],function(err, results) {
-			res.json(results);
+			//res.json(results);
+			stats = results;
+
+			db.collection('tournaments', function(err, collection) {
+				collection.find().sort( { date: -1 } ).toArray(function(err, items) {
+
+					for (i = 0; i < items.length; i++) {
+						for (p = 0; p < items[i].results.length; p++) {
+							for (j = 0; j < stats.length; j++) {
+								if (stats[j]._id == items[i].results[p].player_id) {
+									playerPresent = true;
+									if(p==0){
+										stats[j].winSeriesTemp++;
+										stats[j].headsupSeriesTemp++;
+										if(stats[j].winSeriesTemp>stats[j].winSeries)
+											stats[j].winSeries=stats[j].winSeriesTemp;
+										if(stats[j].headsupSeriesTemp>stats[j].headsupSeries)
+											stats[j].headsupSeries=stats[j].headsupSeriesTemp;
+									}
+									else {
+										if(p==1){
+											stats[j].headsupSeriesTemp=0;
+										}
+										stats[j].winSeriesTemp=0;
+									}
+									break;
+								}
+							}
+						}
+					}
+					res.json(stats);
+				});
+			});
+
         });
     });
 };
@@ -311,6 +379,8 @@ exports.getStatTypes = function(req, res) {
 						{type:'moneyProfitAvg', label:'Media profitti'},
 						{type:'matchTot', label:'Tornei'},
 						{type:'matchFinalTot', label:'Tavoli finali'},
+						{type:'winSeries', label:'Serie vittorie'},
+						{type:'headsupSeries', label:'Serie headsup vinti'},
 						{type:'payTot', label:'Quote'}
 					];
 	res.send(statTypes);
