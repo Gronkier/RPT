@@ -451,38 +451,100 @@ exports.getYearRankPlayers = function(req, res) {
 		collection.aggregate([
 			{$match : {year : parseInt(y)}},
 		    {$unwind:'$results'},
-		    {$group: { 
+		    {$group: {
 					_id:'$results.player_id',
 					pointsTot:{$sum: '$results.points'},
 					winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
 					winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
 					stack:{$sum: 0},
-					pos:{$sum: 0}
+					pos:{$sum: 0},
+					pointPrev:{$sum: 0},
+					posPrev:{$sum: 0}
 					}},
 		    {$project : {
-					_id: 1, 
+					_id: 1,
 					pointsTot: 1,
 					winFinalTot: 1,
 					winTot: 1,
 					stack: 1,
-					pos: 1
+					pos: 1,
+					pointsPrev: 1,
+					posPrev:1
 					}},
 			{$sort : {
 					pointsTot:-1
 					}}
-		    ],function(err, results) {
-			for (i = 0; i < results.length; i++) { 
-				results[i].pos =  1;
-				for (j = 0; j < results.length; j++) {
-					if (results[i].pointsTot >= results[j].pointsTot)
-						break;
-					else
-						results[i].pos++;
-				}
-				results[i].stack= 3000 + 3500 * results[i].pointsTot/results[0].pointsTot + 3500 * (1- ((results[i]).pos-1)/(results.length-1));
-			}
-			//var players = {players:results};
-			res.json(results);
+		    ],function(err, currResults) {
+
+
+			var results = currResults;
+			db.collection('tournaments', function(err, collection) {
+				collection.aggregate([
+					{$match : {year : parseInt(y)}},
+					{$sort : { date:-1}},
+					{$skip:1},
+					{$unwind:'$results'},
+					{$group: {
+						_id:'$results.player_id',
+						pointsTot:{$sum: '$results.points'},
+						winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
+						winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
+						stack:{$sum: 0},
+						pos:{$sum: 0},
+						pointPrev:{$sum: 0},
+						posPrev:{$sum: 0}
+					}},
+					{$project : {
+						_id: 1,
+						pointsTot: 1,
+						winFinalTot: 1,
+						winTot: 1,
+						stack: 1,
+						pos: 1,
+						pointsPrev: 1,
+						posPrev:1
+					}},
+					{$sort : {
+						pointsTot:-1
+					}}
+
+				],function(err, prevResults) {
+					if(prevResults) {
+					   for (i = 0; i < prevResults.length; i++) {
+						   prevResults[i].pos = 1;
+						   for (j = 0; j < prevResults.length; j++) {
+							   if (prevResults[i].pointsTot >= prevResults[j].pointsTot)
+								   break;
+							   else
+								   prevResults[i].pos++;
+						   }
+					   }
+					}
+				   	if(results) {
+						for (i = 0; i < results.length; i++) {
+							results[i].pos = 1;
+							for (j = 0; j < results.length; j++) {
+								if (results[i].pointsTot >= results[j].pointsTot)
+									break;
+								else
+									results[i].pos++;
+							}
+							results[i].stack = 3000 + 3500 * results[i].pointsTot / results[0].pointsTot + 3500 * (1 - ((results[i]).pos - 1) / (results.length - 1));
+							if(prevResults) {
+								for (z = 0; z < prevResults.length; z++) {
+									if (results[i]._id == prevResults[z]._id) {
+										results[i].pointPrev = prevResults[z].pointsTot;
+										results[i].posPrev = prevResults[z].pos;
+										break;
+									}
+								}
+							}
+						}
+						//var players = {players:results};
+					}
+					res.json(results);
+				});
+			});
         });
     });
 };
