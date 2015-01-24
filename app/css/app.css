@@ -47,10 +47,13 @@ body {
 }
 
 .green{
-  color: lime;
+  color: #5cb85c;
 }
 .red{
-  color: red;
+  color: #d9534f;
+}
+.yellow{
+  color: #f0ad4e;
 }
 .black{
   color: black;
