@@ -330,7 +330,7 @@ exports.getStats = function(req, res) {
 			stats = results;
 
 			db.collection('tournaments', function(err, collection) {
-				collection.find().sort( { date: -1 } ).toArray(function(err, items) {
+				collection.find({year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}).sort( { date: -1 } ).toArray(function(err, items) {
 
 					for (i = 0; i < items.length; i++) {
 						for (p = 0; p < items[i].results.length; p++) {
@@ -550,6 +550,75 @@ exports.getYearRankPlayers = function(req, res) {
 };
 
 
+
+
+
+
+
+
+
+
+exports.getCharts = function(req, res) {
+	var series =[];
+	var y = req.params.y;
+	db.collection('tournaments', function(err, collection) {
+		collection.count({'year': parseInt(y)}, function(err, count) {
+
+			for (var n = 0; n < count; n++) {
+				(function (clsn) {
+					// tweet function
+					collection.aggregate([
+						{$match: {year: parseInt(y)}},
+						{$sort: {date: -1}},
+						{$skip: clsn},
+						{$unwind: '$results'},
+						{
+							$group: {
+								_id: '$results.player_id',
+								pointsTot: {$sum: '$results.points'},
+								winTot: {$sum: {$cond: [{$and: [{$eq: ['$results.pos', 1]}, {$eq: ['$details.final', 0]}]}, 1, 0]}},
+								pos: {$sum: 0},
+								date: {$max: '$date'}
+							}
+						},
+						{
+							$project: {
+								_id: 1,
+								pointsTot: 1,
+								winTot: 1,
+								pos: 1,
+								date: 1
+							}
+						},
+						{
+							$sort: {
+								pointsTot: -1
+							}
+						}
+					], function (err, results) {
+						if (results) {
+							for (i = 0; i < results.length; i++) {
+								results[i].pos = 1;
+								for (j = 0; j < results.length; j++) {
+									if (results[i].pointsTot >= results[j].pointsTot)
+										break;
+									else
+										results[i].pos++;
+								}
+							}
+						}
+						series.push(results);
+						if(clsn==count-1) {
+							res.json(series);
+						}
+					});
+
+				})(n)
+			}
+		});
+	});
+
+};
 
 
 

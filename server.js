@@ -78,6 +78,8 @@ apiRouter.get('/stat-types', rpt.getStatTypes);
 
 apiRouter.get('/headsups/:yFrom/:yTo', rpt.getHeadsups);
 
+apiRouter.get('/charts/:y', rpt.getCharts);
+
 app.use('/api', apiRouter); // all routes will be prefixed with /api
 
 // admin call
