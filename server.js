@@ -13,6 +13,10 @@ var bodyParser = require('body-parser');
 //var multer = require('multer');
 var errorHandler = require('errorhandler');
 
+//Auth token
+var expressJwt = require('express-jwt');
+var jwt = require('jsonwebtoken');
+
 var app        = express(); 				// define our app using express
 
 // CONFIGURATION
@@ -55,20 +59,14 @@ app.use("/*", function (req, res, next) {
 // =============================================================================
 // api call
 var	rpt = require('./api/routes/rptApi');
+
 var apiRouter = express.Router(); 				// get an instance of the express Router
-//apiRouter.get('/tournaments', rpt.getTournaments);
-//apiRouter.get('/tournaments/:id', rpt.findTournaments);
-//apiRouter.post('/tournaments', rpt.addTournaments);
-//apiRouter.delete('/tournaments/:id', rpt.deleteTournaments);
-//apiRouter.put('/tournaments/:id', rpt.updateTournaments);
+app.use('/api', apiRouter); // all routes will be prefixed with /api
 
 apiRouter.get('/tournaments/:y', rpt.getYearTournaments);
 apiRouter.get('/tournament-final/:y', rpt.getFinalYearTournament);
 apiRouter.get('/tournament/:id', rpt.getTournamentById);
 apiRouter.get('/tournament-locations', rpt.getTournamentLocations);
-apiRouter.post('/tournament-save', rpt.saveTournament);
-apiRouter.post('/tournament-delete', rpt.deleteTournament);
-
 
 apiRouter.get('/players', rpt.getAllPlayers);
 apiRouter.get('/players/:y', rpt.getYearRankPlayers);
@@ -80,17 +78,29 @@ apiRouter.get('/headsups/:yFrom/:yTo', rpt.getHeadsups);
 
 apiRouter.get('/charts/:y', rpt.getCharts);
 
-app.use('/api', apiRouter); // all routes will be prefixed with /api
+apiRouter.post('/authenticate', rpt.login);
+
+
+
 
 // admin call
 var adminRouter = express.Router(); 				// get an instance of the express Router
-adminRouter.get('/*', function(req, res) {res.sendFile(__dirname + '/app/admin.html'); });   // load the single view file (angular will handle the page changes on the front-end)
 app.use('/adm', adminRouter); // all routes will be prefixed with /admin
+app.use('/adm', expressJwt({secret: rpt.tokenSign})); // protect /adm routes with JWT
+
+adminRouter.post('/tournament-save', rpt.saveTournament);
+adminRouter.post('/tournament-delete', rpt.deleteTournament);
+adminRouter.get('/*', function(req, res) {res.sendFile(__dirname + '/app/admin.html'); });   // load the single view file (angular will handle the page changes on the front-end)
+
+
+
+
 
 // app call
-var appRouter = express.Router(); 				// get an instance of the express Router
+var appRouter = express.Router();
+app.use('/', appRouter);// get an instance of the express Router
+
 appRouter.get('/*', function(req, res) {res.sendFile(__dirname + '/app/index.html'); });   // load the single view file (angular will handle the page changes on the front-end)
-app.use('/', appRouter);
 
 
 // START THE SERVER

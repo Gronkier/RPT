@@ -13,6 +13,8 @@ var BSON = mongo.BSONPure;
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
 
 
+var tokenSign = '454354356457 vhhegj68888';
+
 var db = null;
 var mongoClient = mongo.MongoClient;
 mongoClient.connect(uri, {}, function(error, database){       
@@ -530,7 +532,9 @@ exports.getYearRankPlayers = function(req, res) {
 									results[i].pos++;
 							}
 							results[i].stack = 3000 + 3500 * results[i].pointsTot / results[0].pointsTot + 3500 * (1 - ((results[i]).pos - 1) / (results.length - 1));
-							if(prevResults) {
+
+                            if(prevResults){
+                                results[i].posPrev = prevResults.length+1;
 								for (z = 0; z < prevResults.length; z++) {
 									if (results[i]._id == prevResults[z]._id) {
 										results[i].pointPrev = prevResults[z].pointsTot;
@@ -673,3 +677,30 @@ exports.getHeadsups = function(req, res) {
 		});
 	});
 };
+
+
+
+
+exports.tokenSign = tokenSign;
+
+exports.login = function(req, res) {
+    //TODO validate req.body.username and req.body.password
+    //if is invalid, return 401
+    if (!(req.body.username === 'john.doe' && req.body.password === 'foobar')) {
+        res.send(401, 'Wrong user or password');
+        return;
+    }
+
+    var profile = {
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john@doe.com',
+        id: 123
+    };
+
+    // We are sending the profile inside the token
+    var token = jwt.sign(profile, tokenSign, { expiresInMinutes: 60*5 });
+
+    res.json({ token: token });
+};
+

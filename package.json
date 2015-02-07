@@ -21,7 +21,9 @@
     "morgan": "^1.2.2",
     "serve-favicon": "^2.0.1",
 	"mongodb": "~2.0",
-	"mongoose": "~3.9.3"
+	"mongoose": "~3.9.3",
+    "express-jwt": "^1.0.0",
+    "jsonwebtoken": "^3.2.2"
   },
   "scripts": {
     "postinstall": "bower install",

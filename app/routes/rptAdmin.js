@@ -5,12 +5,14 @@ angular.module('rptAdmin', [
 	'ngRoute',
 	'navbarControllers',
 
+    'loginServices',
 	'playerServices',
 	'newServices',
 	'locationServices',
 	'tournamentServices',
 	'commonServices',
 
+    'loginControllers',
 	'playerControllers',
 	'newControllers',
 	'locationControllers',
@@ -19,6 +21,10 @@ angular.module('rptAdmin', [
 	])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
+            .when('/login', {
+                templateUrl: 'admin/common/login.html',
+                controller: 'loginController'
+            })
 			.when('/tournaments', {
 				templateUrl: 'admin/tournaments/tournaments.html',
 				controller: 'tournamentController'
@@ -41,6 +47,6 @@ angular.module('rptAdmin', [
 		 	})
 			// If invalid route, just redirect to the main list view
 			.otherwise({ 
-				redirectTo: '/tournaments'
+				redirectTo: '/login'
 				});
 	}]);
