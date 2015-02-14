@@ -13,6 +13,7 @@ var BSON = mongo.BSONPure;
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
 
 
+var jwt = require('jsonwebtoken');
 var tokenSign = '454354356457 vhhegj68888';
 
 var db = null;

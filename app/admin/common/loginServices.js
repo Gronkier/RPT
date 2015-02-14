@@ -4,7 +4,7 @@ var serviceLogin = angular.module('loginServices', []);
 var port = '';
 var port = '3003';
 
-serviceLogin.factory('loginService', ['$http', '$location', function($http, $location){
+serviceLogin.factory('loginService', ['$http', '$location', '$window', function($http, $location, $window){
 
     var protocol = $location.protocol().concat('://');
     var host = $location.host();
@@ -16,13 +16,16 @@ serviceLogin.factory('loginService', ['$http', '$location', function($http, $loc
                 url: protocol.concat(host,':', port, '/api/authenticate'),
                 data:user
             })
-                .success(function(data) {
-                    console.log(data);
-                    callback(data);
+                .success(function (data, status, headers, config) {
+                    $window.sessionStorage.token = data.token;
+                    callback('Welcome');
                 })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                    callback(data);
+                .error(function (data, status, headers, config) {
+                    // Erase the token if the user fails to log in
+                    delete $window.sessionStorage.token;
+
+                    // Handle login errors here
+                    callback('Error: Invalid user or password');
                 });
         }
     };

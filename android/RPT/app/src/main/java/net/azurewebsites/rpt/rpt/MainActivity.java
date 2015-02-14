@@ -1,23 +1,77 @@
 package net.azurewebsites.rpt.rpt;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
+public class MainActivity extends ActionBarActivity {
 
-public class MainActivity extends Activity {
+    WebView view;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        view = (WebView) this.findViewById(R.id.webView);
+
+        final ProgressDialog progress = ProgressDialog.show(this, "", "Loading...", true);
 
         String url = "http://rpt.azurewebsites.net";
-        WebView view = (WebView) this.findViewById(R.id.webView);
+        //view = (WebView) this.findViewById(R.id.webView);
         view.getSettings().setJavaScriptEnabled(true);
-        view.loadUrl(url);
+        view.getSettings().setSupportZoom(false);
+        view.getSettings().setBuiltInZoomControls(false);
+        view.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if(progress!=null && progress.isShowing())
+                {
+                    progress.dismiss();
+                }
+            }
+        });
+
+        if (savedInstanceState == null)
+        {
+            view.loadUrl(url);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(event.getAction() == KeyEvent.ACTION_DOWN){
+            switch(keyCode)
+            {
+                case KeyEvent.KEYCODE_BACK:
+                    if(view.canGoBack()){
+                        view.goBack();
+                    }else{
+                        finish();
+                    }
+                    return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState )
+    {
+        super.onSaveInstanceState(outState);
+        view.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        view.restoreState(savedInstanceState);
     }
 
 
