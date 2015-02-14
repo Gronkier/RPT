@@ -2,8 +2,8 @@
 
 var navbarControllers = angular.module('navbarControllers', []);
 
-navbarControllers.controller('navbarController', ['$scope', '$location',
-    function($scope, $location)
+navbarControllers.controller('navbarController', ['$scope', '$location','loginService',
+    function($scope, $location, loginService)
     {
         //Hamburger menu toggle
         $(".navbar-nav li a").click(function (event) {
@@ -17,4 +17,19 @@ navbarControllers.controller('navbarController', ['$scope', '$location',
         $scope.isActive = function (viewLocation) {
             return viewLocation === $location.path();
         };
+
+
+        $scope.isAuthorized = loginService.isAuthorized();
+        $scope.isDisabled = !$scope.isAuthorized;
+        $scope.getLink = function (link) {
+            $scope.isAuthorized = loginService.isAuthorized();
+            $scope.isDisabled = !$scope.isAuthorized;
+            if($scope.isAuthorized ) {
+                return link;
+            }
+            else {
+                return "#";
+            }
+        };
+
     }]);

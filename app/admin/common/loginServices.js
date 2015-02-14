@@ -2,12 +2,13 @@
 
 var serviceLogin = angular.module('loginServices', []);
 var port = '';
-var port = '3003';
+//var port = '3003';
 
 serviceLogin.factory('loginService', ['$http', '$location', '$window', function($http, $location, $window){
 
     var protocol = $location.protocol().concat('://');
     var host = $location.host();
+    var authorization = false;
 
     return {
         tryLogin: function(user, callback) {
@@ -18,15 +19,19 @@ serviceLogin.factory('loginService', ['$http', '$location', '$window', function(
             })
                 .success(function (data, status, headers, config) {
                     $window.sessionStorage.token = data.token;
+                    authorization = true;
                     callback('Welcome');
                 })
                 .error(function (data, status, headers, config) {
                     // Erase the token if the user fails to log in
                     delete $window.sessionStorage.token;
-
-                    // Handle login errors here
-                    callback('Error: Invalid user or password');
+                    authorization = false;
+                    callback('Error');
                 });
+        },
+
+        isAuthorized: function() {
+            return authorization;
         }
     };
 }]);

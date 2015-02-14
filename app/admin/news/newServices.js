@@ -2,7 +2,7 @@
 
 var serviceNew = angular.module('newServices', []);
 var port = '';
-var port = '3003';
+//var port = '3003';
 
 serviceNew.factory('newService', ['$http', '$location', function($http, $location){
 

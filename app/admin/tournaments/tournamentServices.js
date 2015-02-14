@@ -2,7 +2,7 @@
 
 var serviceTournament = angular.module('tournamentServices', []);
 var port = '';
-var port = '3003';
+//var port = '3003';
 var editTournament;
 var newId;
 

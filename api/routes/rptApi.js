@@ -687,14 +687,14 @@ exports.tokenSign = tokenSign;
 exports.login = function(req, res) {
     //TODO validate req.body.username and req.body.password
     //if is invalid, return 401
-    if (!(req.body.username === 'john.doe' && req.body.password === 'foobar')) {
+    if (!(req.body.username === 'matteo' && req.body.password === '3083')) {
         res.send(401, 'Wrong user or password');
         return;
     }
 
     var profile = {
-        first_name: 'John',
-        last_name: 'Doe',
+        first_name: req.body.username,
+        last_name: req.body.username,
         email: 'john@doe.com',
         id: 123
     };
