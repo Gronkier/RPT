@@ -57,7 +57,7 @@
 				<div ng-controller="navbarController" class="collapse navbar-collapse" id="navbarRPT">
 					<ul class="nav navbar-nav">
 						<li ng-class="{ active: isActive('/tournaments'), disabled: isDisabled}"><a href="{{getLink('#/tournaments')}}"><i class="fa fa-calendar"></i> Tornei<span class="sr-only">(current)</span></a></li>
-						<li ng-class="{ active: isActive('/players'), disabled: isDisabled}"><a href="{{getLink('#/players')}}"></i> Giocatori</a></li>
+						<li ng-class="{ active: isActive('/players'), disabled: isDisabled}"><a href="{{getLink('#/players')}}"><i class="fa fa-users"></i> Giocatori</a></li>
 						<li ng-class="{ active: isActive('/locations'), disabled: isDisabled}"><a href="{{getLink('#/locations')}}"><i class="fa fa-globe"></i> Luoghi</a></li>
 						<li ng-class="{ active: isActive('/news'), disabled: isDisabled}"><a href="{{getLink('#/news')}}"><i class="fa fa-comment"></i> News</a></li>
                         <li ng-class="{ active: isActive('/adm')}"><a href="/"><i class="fa fa-sign-out"></i> Esci</a></li>

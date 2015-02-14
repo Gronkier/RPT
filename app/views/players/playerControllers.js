@@ -28,6 +28,16 @@ playerControllers.controller('playerController', ['$scope', 'playerService',
             var bronze = (num - Math.floor(num / 10)*10 -Math.floor((num - Math.floor(num / 10)*10)/5)*5);
             return new Array(bronze);
         };
+        $scope.getTrend = function(num) {
+            if(num>0) {
+                var trend = ($scope.players[num].pointsTot - $scope.players[num].pointsPrev) - ($scope.players[num-1].pointsTot - $scope.players[num-1].pointsPrev);
+                if (trend > 0)
+                    return 1;
+                if (trend < 0)
+                    return -1;
+            }
+            return 0;
+        };
 
     // $scope.setImage = function(imageUrl) {
     //   $scope.mainImageUrl = imageUrl;

@@ -461,7 +461,7 @@ exports.getYearRankPlayers = function(req, res) {
 					winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
 					stack:{$sum: 0},
 					pos:{$sum: 0},
-					pointPrev:{$sum: 0},
+					pointsPrev:{$sum: 0},
 					posPrev:{$sum: 0}
 					}},
 		    {$project : {
@@ -494,7 +494,7 @@ exports.getYearRankPlayers = function(req, res) {
 						winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
 						stack:{$sum: 0},
 						pos:{$sum: 0},
-						pointPrev:{$sum: 0},
+						pointsPrev:{$sum: 0},
 						posPrev:{$sum: 0}
 					}},
 					{$project : {
@@ -538,7 +538,7 @@ exports.getYearRankPlayers = function(req, res) {
                                 results[i].posPrev = prevResults.length+1;
 								for (z = 0; z < prevResults.length; z++) {
 									if (results[i]._id == prevResults[z]._id) {
-										results[i].pointPrev = prevResults[z].pointsTot;
+										results[i].pointsPrev = prevResults[z].pointsTot;
 										results[i].posPrev = prevResults[z].pos;
 										break;
 									}
@@ -678,7 +678,6 @@ exports.getHeadsups = function(req, res) {
 		});
 	});
 };
-
 
 
 
