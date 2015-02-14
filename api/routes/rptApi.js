@@ -685,23 +685,28 @@ exports.getHeadsups = function(req, res) {
 exports.tokenSign = tokenSign;
 
 exports.login = function(req, res) {
-    //TODO validate req.body.username and req.body.password
-    //if is invalid, return 401
-    if (!(req.body.username === 'matteo' && req.body.password === '3083')) {
-        res.send(401, 'Wrong user or password');
-        return;
-    }
+    var user = req.body.username;
+    var psw = req.body.password;
 
-    var profile = {
-        first_name: req.body.username,
-        last_name: req.body.username,
-        email: 'john@doe.com',
-        id: 123
-    };
+    db.collection('logins', function(err, collection) {
+        collection.find( {$and:[{'user': user},{'psw': psw}]}, {'limit':1}).toArray(function(err, results) {
+            if(results.length > 0){
+                var profile = {
+                    first_name: req.body.username,
+                    last_name: req.body.username,
+                    email: '',
+                    id: results[0]._id
+                };
 
-    // We are sending the profile inside the token
-    var token = jwt.sign(profile, tokenSign, { expiresInMinutes: 60*5 });
+                // We are sending the profile inside the token
+                var token = jwt.sign(profile, tokenSign, { expiresInMinutes: 60*5 });
 
-    res.json({ token: token });
+                res.json({ token: token });
+            }
+            else {
+                res.send(401, 'Wrong user or password');
+            }
+        });
+    });
 };
 
