@@ -15,7 +15,7 @@ var errorHandler = require('errorhandler');
 
 //Auth token
 var expressJwt = require('express-jwt');
-var jwt = require('jsonwebtoken');
+//var jwt = require('jsonwebtoken');
 
 var app        = express(); 				// define our app using express
 
