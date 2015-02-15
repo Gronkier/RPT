@@ -10,6 +10,7 @@
 
 		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 		<link rel="stylesheet" href="bower_components/Font-Awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
 		<link rel="stylesheet" href="css/app.css">
 
 		<script src="bower_components/jquery/jquery.js"></script>
@@ -18,12 +19,15 @@
 		<!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>-->
 		<script src="bower_components/angular-route/angular-route.js"></script>
 		<script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/Chart.js/Chart.js"></script>
+        <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
 
 
 		<script src="routes/rptApp.js"></script>
 		<script src="views/navbar/navbarControllers.js"></script>
 		<script src="views/stats/statControllers.js"></script>
-		<script src="views/players/playerControllers.js"></script>
+        <script src="views/charts/chartControllers.js"></script>
+        <script src="views/players/playerControllers.js"></script>
 		<script src="views/headsup/headsupControllers.js"></script>
 		<script src="views/tournaments/tournamentControllers.js"></script>
 		<script src="views/seasons/seasonControllers.js"></script>
@@ -31,6 +35,7 @@
 		<script src="views/common/commonServices.js"></script>
 		<script src="views/players/playerServices.js"></script>
 		<script src="views/stats/statServices.js"></script>
+        <script src="views/charts/chartServices.js"></script>
 		<script src="views/headsup/headsupServices.js"></script>
 		<script src="views/tournaments/tournamentServices.js"></script>
 
@@ -55,6 +60,7 @@
 					<ul class="nav navbar-nav">
 						<li ng-class="{ active: isActive('/players')}"><a href="#/players"><i class="fa fa-trophy"></i> Classifica<span class="sr-only">(current)</span></a></li>
 						<li ng-class="{ active: isActive('/stats')}"><a href="#/stats"><i class="fa fa-bar-chart"></i> Statistiche</a></li>
+                        <li ng-class="{ active: isActive('/charts')}"><a href="#/charts"><i class="fa fa-line-chart"></i> Charts</a></li>
 						<li ng-class="{ active: isActive('/headsup')}"><a href="#/headsup"><i class="fa fa-flash"></i> Sfide Headsup</a></li>
 						<li ng-class="{ active: isActive('/tournaments')}"><a href="#/tournaments"><i class="fa fa-calendar"></i> Tornei</a></li>
 						<li ng-class="{ active: isActive('/seasons')}"><a href="#/seasons"><i class="fa fa-history"></i> Stagioni</a></li>

@@ -1,101 +1,69 @@
 'use strict';
 
-var playerControllers = angular.module('playerControllers', []);
+var chartControllers = angular.module('chartControllers', ['chart.js']);
 
-playerControllers.controller('playerController', ['$scope', 'playerService',
-    function($scope, playerService) {
-      
-      	$scope.getPlayers =  function() {
-            playerService.yearPlayers($scope.year, function(data) { 
-                $scope.players = data;
-                });
+chartControllers.controller('chartController', ['$scope', 'chartService','commonService',
+    function($scope, chartService, commonService) {
+
+        $scope.getYears =  function() {
+            commonService.years(function(data) {
+                $scope.years = data;
+                $scope.yearSelected = $scope.years[$scope.years.length-1];
+            });
         };
 
-        $scope.getNumber = function(num) {
-            if (num > 0)
-                return new Array(num);
-            return [];
-        };
-        $scope.getNumberGold = function(num) {
-            var gold = Math.floor(num / 10);
-            return new Array(gold);
-        };
-        $scope.getNumberSilver = function(num) {
-            var silver = Math.floor((num - Math.floor(num / 10)*10)/5);
-            return new Array(silver);
-        };
-        $scope.getNumberBronze = function(num) {
-            var bronze = (num - Math.floor(num / 10)*10 -Math.floor((num - Math.floor(num / 10)*10)/5)*5);
-            return new Array(bronze);
+        $scope.getCharts =  function() {
+                $scope.charts = ['pos','pointsTot','winTot'];
+                $scope.chartSelected = $scope.charts[0];
         };
 
-    // $scope.setImage = function(imageUrl) {
-    //   $scope.mainImageUrl = imageUrl;
-    // };
-
-        $scope.year = new Date().getFullYear();
-        $scope.getPlayers();
-	
-}]);
-
-<script>
-angular.module("KendoDemos", [ "kendo.directives" ])
-    .controller("MyCtrl", function($scope){
-        $scope.onSeriesHover = function(e) {
-            kendoConsole.log(kendo.format("event :: seriesHover ({0} : {1})", e.series.name, e.value));
-        };
-
-        $scope.electricity = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    url: "../content/dataviz/js/spain-electricity.json",
-                    dataType: "json"
+      	$scope.getChart =  function() {
+            chartService.yearCharts($scope.yearSelected, function(data) {
+                var labels=[];
+                var series =[];
+                var chartData =[];
+                var i=0;
+                var j=0;
+                for (i = 0; i < data.length; i++)
+                {
+                    labels.push(data[i][0].date.toString().substring(0,10));
+                    var dataRow = [];
+                    for (j = 0; j < data[i].length; j++)
+                    {
+                        if(i==0){
+                            series.push(data[i][j]._id);
+                        }
+                        if($scope.chartSelected == 'pos')
+                            dataRow.push(data[i][j].pos);
+                        if($scope.chartSelected == 'pointsTot')
+                            dataRow.push(data[i][j].pointsTot);
+                        if($scope.chartSelected == 'winTot')
+                            dataRow.push(data[i][j].winTot);
+                    }
+                    chartData.push(dataRow);
                 }
-            },
-            sort: {
-                field: "year",
-                dir: "asc"
-            }
-        });
-    })
-</script>
 
+                $scope.labels = labels;
+                $scope.series = series;
+                $scope.data = chartData;
+            });
+        };
 
-[
-    {
-        "country": "Spain",
-        "year": "2008",
-        "unit": "GWh",
-        "solar": 2578,
-        "hydro": 26112,
-        "wind": 32203,
-        "nuclear": 58973
-    },
-    {
-        "country": "Spain",
-        "year": "2007",
-        "unit": "GWh",
-        "solar": 508,
-        "hydro": 30522,
-        "wind": 27568,
-        "nuclear": 55103
-    },
-    {
-        "country": "Spain",
-        "year": "2006",
-        "unit": "GWh",
-        "solar": 119,
-        "hydro": 29831,
-        "wind": 23297,
-        "nuclear": 60126
-    },
-    {
-        "country": "Spain",
-        "year": "2005",
-        "unit": "GWh",
-        "solar": 41,
-        "hydro": 23025,
-        "wind": 21176,
-        "nuclear": 57539
-    }
-]
+        //Init
+        $scope.getYears();
+        $scope.getCharts();
+
+        $scope.getChart();
+
+        //Events
+        $scope.onYearChange = function(year) {
+            $scope.yearSelected = year;
+            $scope.getChart();
+        };
+
+        $scope.onChartChange = function(chart) {
+            $scope.chartSelected = chart;
+            $scope.getChart();
+        };
+
+}]);
