@@ -571,7 +571,7 @@ exports.getCharts = function(req, res) {
 
 			for (var n = 0; n < count; n++) {
 				(function (clsn) {
-					// tweet function
+
 					collection.aggregate([
 						{$match: {year: parseInt(y)}},
 						{$sort: {date: -1}},
@@ -602,8 +602,14 @@ exports.getCharts = function(req, res) {
 						}
 					], function (err, results) {
 						if (results) {
+                            var date = results[0].date;
+                            for (i = 0; i < results.length; i++) {
+                                if(date < results[i].date)
+                                    date = results[i].date;
+                            }
 							for (i = 0; i < results.length; i++) {
 								results[i].pos = 1;
+                                results[i].date = date;
 								for (j = 0; j < results.length; j++) {
 									if (results[i].pointsTot >= results[j].pointsTot)
 										break;
@@ -612,8 +618,21 @@ exports.getCharts = function(req, res) {
 								}
 							}
 						}
-						series.push(results);
-						if(clsn==count-1) {
+                        if(series.length == 0)
+                            series.push(results);
+                        else {
+                            for (i = 0; i < series.length; i++) {
+                                if (results[0].date < series[i][0].date) {
+                                    series.splice(i, 0, results);
+                                    break;
+                                }
+                                if ( i == series.length-1){
+                                    series.push(results);
+                                    break;
+                                }
+                            }
+                        }
+						if(series.length == count) {//clsn==count-1 &&
 							res.json(series);
 						}
 					});
