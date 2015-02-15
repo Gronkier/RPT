@@ -13,7 +13,7 @@ chartControllers.controller('chartController', ['$scope', 'chartService','common
         };
 
         $scope.getCharts =  function() {
-                $scope.charts = ['pos','pointsTot','winTot'];
+                $scope.charts = ['Classifica','Punti','Vittorie'];
                 $scope.chartSelected = $scope.charts[0];
         };
 
@@ -24,28 +24,52 @@ chartControllers.controller('chartController', ['$scope', 'chartService','common
                 var chartData =[];
                 var i=0;
                 var j=0;
-                for (i = 0; i < data.length; i++)
-                {
-                    labels.push(data[i][0].date.toString().substring(0,10));
-                    var dataRow = [];
-                    for (j = 0; j < data[i].length; j++)
-                    {
-                        if(i==0){
-                            series.push(data[i][j]._id);
-                        }
-                        if($scope.chartSelected == 'pos')
-                            dataRow.push(data[i][j].pos);
-                        if($scope.chartSelected == 'pointsTot')
-                            dataRow.push(data[i][j].pointsTot);
-                        if($scope.chartSelected == 'winTot')
-                            dataRow.push(data[i][j].winTot);
+                var k=0;
+                if(data.length >0) {
+                    //get players
+                    var dataRow;
+                    for (i = 0; i < data[0].length; i++) {
+                        if(i>6)
+                            break;
+                        series.push(data[0][i]._id);
+                        dataRow = new Array(data.length-1);
+                        chartData.push(dataRow)
                     }
-                    chartData.push(dataRow);
+                    //get data
+                    var reverseIndex = data.length-1;
+                    for (i = reverseIndex; i >= 0; i--) {
+                        // x axis
+                        labels.push(data[i][0].date.toString().substring(0, 10));
+                        //series
+                        for(k=0; k<series.length; k++) {
+                            //init
+                            if ($scope.chartSelected == 'Classifica')
+                                chartData[k][reverseIndex-i]=-data[0].length;
+                            if ($scope.chartSelected == 'Punti')
+                                chartData[k][reverseIndex-i]= 0;
+                            if ($scope.chartSelected == 'Vittorie')
+                                chartData[k][reverseIndex-i]= 0;
+
+                            //search values
+                            for (j = 0; j < data[i].length; j++) {
+                                if (series[k] == data[i][j]._id) {
+                                    if ($scope.chartSelected == 'Classifica')
+                                        chartData[k][reverseIndex-i]= -data[i][j].pos;
+                                    if ($scope.chartSelected == 'Punti')
+                                        chartData[k][reverseIndex-i]= data[i][j].pointsTot;
+                                    if ($scope.chartSelected == 'Vittorie')
+                                        chartData[k][reverseIndex-i]= data[i][j].winTot;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 $scope.labels = labels;
                 $scope.series = series;
                 $scope.data = chartData;
+
             });
         };
 

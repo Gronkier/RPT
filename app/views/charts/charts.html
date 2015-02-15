@@ -17,15 +17,12 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12 top10">
-            <p>Work in progress...</p>
-        </div>
     </div>
 
 	<div class="row">
 		<div class="col-md-12">
             <div class="well well-sm">
-                <canvas id="line" class="chart chart-line" legend="true"
+                <canvas id="line" class="chart chart-line" legend="true" options="{datasetFill : true, bezierCurve : true, bezierCurveTension : 0.1}"
                         data="data"
                         labels="labels"
                         series="series">
