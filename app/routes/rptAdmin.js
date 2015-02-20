@@ -37,6 +37,10 @@ angular.module('rptAdmin', [
 				templateUrl: 'admin/players/players.html',
 				controller: 'playerController'
             })
+            .when('/playerEdit', {
+                templateUrl: 'admin/players/playerEdit.html',
+                controller: 'playerEditController'
+            })
 			.when('/locations', {
 				templateUrl: 'admin/locations/locations.html',
 				controller: 'locationController'

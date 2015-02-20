@@ -67,8 +67,18 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
 		};
 
 		$scope.calculate = function() {
+            var i =0;
+            if($scope.editTournament.results.length > 0) {
+                var TotalPay = 0;
+                for (i = 0; i < $scope.editTournament.results.length; i++) {
+                    TotalPay = TotalPay + $scope.editTournament.results[i].pay;
+                }
 
-
+                for (i = 0; i < $scope.editTournament.results.length; i++) {
+                    var player = $scope.editTournament.results[i];
+                    player.points = TotalPay / player.pos * 10 * 1.25;
+                }
+            }
 		};
 
 		$scope.deleteTournament = function() {

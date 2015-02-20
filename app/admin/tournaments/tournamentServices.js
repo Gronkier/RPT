@@ -77,7 +77,7 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
       saveTournament: function(tournament, callback) {
           $http({   method: 'POST',
                     //url: 'http://localhost:3003/api/tournament'
-                    url: protocol.concat(host,':', port, '/api/tournament-save/'),
+                    url: protocol.concat(host,':', port, '/adm/tournament-save/'),
                     data:tournament
           })
               .success(function(data) {
@@ -93,7 +93,7 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
       deleteTournament: function(tournament, callback) {
           $http({ method: 'POST',
               //url: 'http://localhost:3003/api/tournament'
-              url: protocol.concat(host,':', port, '/api/tournament-delete/'),
+              url: protocol.concat(host,':', port, '/adm/tournament-delete/'),
               data:tournament
           })
               .success(function(data) {
