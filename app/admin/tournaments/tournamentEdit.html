@@ -18,6 +18,7 @@
 
 
   <div class="well well-sm">
+      <form name="myForm">
     <div class="row bottom10">
 
       <div class="col-md-12 col-sm-12 col-xs-12 top10">
@@ -39,7 +40,7 @@
       <div class="col-md-4 col-sm-4 col-xs-12 top10">
         <div class="input-group" align="right">
           <span class="input-group-addon">Tavoli</span>
-          <input class="form-control" ng-Model="editTournament.details.tables" type="text"  placeholder="">
+          <input class="form-control" ng-Model="editTournament.details.tables" type="number" min="1" placeholder="">
         </div>
       </div>
 
@@ -67,23 +68,32 @@
       </div>
 
       <div class="col-md-3 col-sm-3 col-xs-12 top10">
-        <div class="input-group" align="right">
+        <div class="input-group" align="right" ng-class="{'has-error': myForm.pointsInput.$invalid}">
           <span class="input-group-addon">Punti</span>
-          <input class="form-control" ng-Model="result.points" type="text"  placeholder="">
+          <input   name="pointsInput" class="form-control" ng-Model="result.points" type="number" step="any" min ="0" placeholder="">
+            <span class="help-inline" ng-show="myForm.pointsInput.$error.number"></span>
         </div>
       </div>
+
+        <!--<form name="myForm">
+            <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+                <label>Name</label>
+                <input type="text" name="name" ng-model="project.name" required>
+                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+            </div>
+        </form>-->
 
       <div class="col-md-3 col-sm-3 col-xs-12 top10">
         <div class="input-group" align="right">
           <span class="input-group-addon">Montepremi</span>
-          <input class="form-control" ng-Model="result.money" type="text"  placeholder="">
+          <input class="form-control" ng-Model="result.money" type="number" step="any" min="0" placeholder="">
         </div>
       </div>
 
       <div class="col-md-2 col-sm-2 col-xs-12 top10">
         <div class="input-group" align="right">
           <span class="input-group-addon">Quota</span>
-          <input class="form-control" ng-Model="result.pay" type="text"  placeholder="">
+          <input class="form-control" ng-Model="result.pay" type="number" step="any" min="0" placeholder="">
         </div>
       </div>
 
@@ -98,7 +108,7 @@
         <button type="button" class="btn btn-primary pull-right"  ng-click="newResult()"><i class="fa fa-plus"></i></button>
       </div>
     </div>
-
+      </form>
   </div>
 </div>
 

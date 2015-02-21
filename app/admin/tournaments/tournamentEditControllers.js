@@ -76,7 +76,8 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
 
                 for (i = 0; i < $scope.editTournament.results.length; i++) {
                     var player = $scope.editTournament.results[i];
-                    player.points = TotalPay / player.pos * 10 * 1.25;
+                    player.points = $scope.editTournament.results.length / player.pos * 10 * (1.25+ TotalPay/$scope.editTournament.results.length);
+                    player.points = parseFloat(player.points.toFixed(2));
                 }
             }
 		};
@@ -86,4 +87,9 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
 				$location.path( '/tournaments' );
 			});
 		};
+
+        //Watch
+        $scope.$watch('editTournament',function(val,old){
+            $scope.value = parseFloat(val);
+        });
 	}]);
