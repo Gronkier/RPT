@@ -13,7 +13,7 @@ chartControllers.controller('chartController', ['$scope', 'chartService','common
         };
 
         $scope.getCharts =  function() {
-                $scope.charts = ['Classifica','Punti','Vittorie'];
+                $scope.charts = ['Punti','Classifica','Vittorie'];
                 $scope.chartSelected = $scope.charts[0];
         };
 
