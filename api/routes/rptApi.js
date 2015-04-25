@@ -613,7 +613,7 @@ exports.getCharts = function(req, res) {
 								results[i].pos = 1;
                                 results[i].date = date;
 								for (j = 0; j < results.length; j++) {
-									if (prevResults[i].pointsTot.toFixed(2) >= prevResults[j].pointsTot.toFixed(2))
+									if (results[i].pointsTot.toFixed(2) >= results[j].pointsTot.toFixed(2))
 										break;
 									else
 										results[i].pos++;
