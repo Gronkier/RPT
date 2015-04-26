@@ -516,7 +516,7 @@ exports.getYearRankPlayers = function(req, res) {
 					   for (i = 0; i < prevResults.length; i++) {
 						   prevResults[i].pos = 1;
 						   for (j = 0; j < prevResults.length; j++) {
-							   if (parseFloat(prevResults[i].pointsTot).toFixed(2) >= parseFloat(prevResults[j].pointsTot).toFixed(2))
+							   if (parseFloat(parseFloat(prevResults[i].pointsTot).toFixed(2)) >= parseFloat(parseFloat(prevResults[j].pointsTot).toFixed(2)))
 								   break;
 							   else
 								   prevResults[i].pos++;
@@ -527,19 +527,19 @@ exports.getYearRankPlayers = function(req, res) {
 						for (i = 0; i < results.length; i++) {
 							results[i].pos = 1;
                             for (j = 0; j < results.length; j++) {
-								if (parseFloat(results[i].pointsTot).toFixed(2) >= parseFloat(results[j].pointsTot).toFixed(2))
+								if (parseFloat(parseFloat(results[i].pointsTot).toFixed(2)) >= parseFloat(parseFloat(results[j].pointsTot).toFixed(2)))
 									break;
 								else
 									results[i].pos++;
 							}
-                            results[i].stack = parseFloat(3000 + 3500 * results[i].pointsTot / results[0].pointsTot + 3500 * (1 - ((results[i]).pos - 1) / (results.length - 1))).toFixed(2);
-                            results[i].pointsTot = parseFloat(results[i].pointsTot).toFixed(2);
+                            results[i].stack = parseFloat(parseFloat(3000 + 3500 * results[i].pointsTot / results[0].pointsTot + 3500 * (1 - ((results[i]).pos - 1) / (results.length - 1))).toFixed(2));
+                            results[i].pointsTot = parseFloat(parseFloat(results[i].pointsTot).toFixed(2));
 
                             if(prevResults){
                                 results[i].posPrev = prevResults.length+1;
 								for (z = 0; z < prevResults.length; z++) {
 									if (results[i]._id == prevResults[z]._id) {
-										results[i].pointsPrev = parseFloat(prevResults[z].pointsTot).toFixed(2);
+										results[i].pointsPrev = parseFloat(parseFloat(prevResults[z].pointsTot).toFixed(2));
 										results[i].posPrev = prevResults[z].pos;
 										break;
 									}
@@ -613,12 +613,12 @@ exports.getCharts = function(req, res) {
 								results[i].pos = 1;
                                 results[i].date = date;
 								for (j = 0; j < results.length; j++) {
-									if (parseFloat(results[i].pointsTot).toFixed(2) >= parseFloat(results[j].pointsTot).toFixed(2))
+									if (parseFloat(parseFloat(results[i].pointsTot).toFixed(2)) >= parseFloat(parseFloat(results[j].pointsTot).toFixed(2)))
 										break;
 									else
 										results[i].pos++;
 								}
-                                results[i].pointsTot = parseFloat(results[i].pointsTot).toFixed(2);
+                                results[i].pointsTot = parseFloat(parseFloat(results[i].pointsTot).toFixed(2));
 							}
 						}
                         if(series.length == 0)
