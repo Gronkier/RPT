@@ -38,6 +38,19 @@ playerControllers.controller('playerController', ['$scope', 'playerService',
             }
             return 0;
         };
+        $scope.getDistanceFromNext = function(num) {
+            if(num>0) {
+                return ($scope.players[num-1].pointsTot - $scope.players[num].pointsTot).toFixed(2);
+            }
+            return 0;
+        };
+        $scope.getDistanceFromLeader = function(num) {
+            if(num>0) {
+                return ($scope.players[0].pointsTot - $scope.players[num].pointsTot).toFixed(2);
+            }
+            return 0;
+        };
+
 
     // $scope.setImage = function(imageUrl) {
     //   $scope.mainImageUrl = imageUrl;
