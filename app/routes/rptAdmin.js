@@ -11,13 +11,15 @@ angular.module('rptAdmin', [
 	'locationServices',
 	'tournamentServices',
 	'commonServices',
+    'statServices',
 
     'loginControllers',
 	'playerControllers',
 	'newControllers',
 	'locationControllers',
 	'tournamentControllers',
-	'tournamentEditControllers'
+	'tournamentEditControllers',
+    'statControllers'
 	])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
@@ -49,6 +51,10 @@ angular.module('rptAdmin', [
 				templateUrl: 'admin/news/news.html',
 				controller: 'newController'
 		 	})
+            .when('/stats', {
+                templateUrl: 'admin/stats/stats.html',
+                controller: 'statController'
+            })
 			// If invalid route, just redirect to the main list view
 			.otherwise({ 
 				redirectTo: '/login'

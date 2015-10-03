@@ -8,7 +8,7 @@ seasonControllers.controller('seasonController', ['$scope', 'tournamentService',
 		$scope.getYears =  function() {
 			commonService.years(function(data) {
 				$scope.years = data;
-				$scope.yearSelected = $scope.years[0];
+				$scope.yearSelected = $scope.years[$scope.years.length-1];
 			});
 		};
 
@@ -17,6 +17,12 @@ seasonControllers.controller('seasonController', ['$scope', 'tournamentService',
 				$scope.finalTournament = data[0];
 			});
 		};
+
+        $scope.getYearTournaments =  function() {
+            tournamentService.yearTournaments($scope.yearSelected, function(data) {
+                $scope.totalYearTournaments = data.length;
+            });
+        };
 
 		$scope.getPlayers =  function() {
 			playerService.yearPlayers($scope.yearSelected, function(data) {
@@ -55,12 +61,14 @@ seasonControllers.controller('seasonController', ['$scope', 'tournamentService',
 		//Init
 		$scope.getYears();
 		$scope.getFinalYearTournament();
+        $scope.getYearTournaments();
 		$scope.getPlayers();
 
 		//Events
 		$scope.onchange = function(year) {
 			$scope.yearSelected = year;
 			$scope.getFinalYearTournament();
+            $scope.getYearTournaments();
 			$scope.getPlayers();
 		};
 

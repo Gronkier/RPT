@@ -18,6 +18,15 @@ playerControllers.controller('playerController', ['$scope', 'playerService',
                 }
             }
         };
+        $scope.editPlayer = function(player) {
+            if(player) {
+                playerService.playerById(player, function (data) {
+                    if (data.length > 0) {
+                        $location.path('/playerEdit');
+                    }
+                });
+            }
+        };
 
         $scope.newLocation;
 

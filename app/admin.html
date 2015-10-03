@@ -30,6 +30,7 @@
 		<script src="admin/players/playerControllers.js"></script>
 		<script src="admin/locations/locationControllers.js"></script>
 		<script src="admin/news/newControllers.js"></script>
+        <script src="admin/stats/statControllers.js"></script>
 
         <script src="admin/common/loginServices.js"></script>
 		<script src="admin/common/commonServices.js"></script>
@@ -37,7 +38,7 @@
 		<script src="admin/players/playerServices.js"></script>
 		<script src="admin/locations/locationServices.js"></script>
 		<script src="admin/news/newServices.js"></script>
-
+        <script src="admin/stats/statServices.js"></script>
 
 	</head>
 	<body ng-app="rptAdmin">
@@ -62,6 +63,7 @@
 						<li ng-class="{ active: isActive('/players'), disabled: isDisabled}"><a href="{{getLink('#/players')}}"><i class="fa fa-users"></i> Giocatori</a></li>
 						<li ng-class="{ active: isActive('/locations'), disabled: isDisabled}"><a href="{{getLink('#/locations')}}"><i class="fa fa-globe"></i> Luoghi</a></li>
 						<li ng-class="{ active: isActive('/news'), disabled: isDisabled}"><a href="{{getLink('#/news')}}"><i class="fa fa-comment"></i> News</a></li>
+                        <li ng-class="{ active: isActive('/stats'), disabled: isDisabled}"><a href="{{getLink('#/stats')}}"><i class="fa fa-bar-chart"></i> Statistiche</a></li>
                         <li ng-class="{ active: isActive('/adm')}"><a href="/"><i class="fa fa-sign-out"></i> Esci</a></li>
 					</ul>
 				</div>
