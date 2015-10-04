@@ -59,6 +59,8 @@
 							<dl class="dl-horizontal no-margin">
 								<dt>Punti</dt>
 								<dd>{{stat.pointsTot.toFixed(2)}}</dd>
+                                <dt>&nbsp</dt>
+                                <dd>&nbsp</dd>
 								<dt>Vittorie</dt>
 								<dd>{{stat.winTot}}</dd>
 								<dt>HeadsUp</dt>
@@ -71,17 +73,19 @@
 								<dd>{{stat.moneyProfit}}</dd>-->
 								<dt>Tornei</dt>
 								<dd>{{stat.matchTot}}</dd>
-								<dt>Vittorie finali</dt>
-								<dd>{{stat.winFinalTot}}</dd>
 								<dt>Serie vittorie</dt>
 								<dd>{{stat.winSeries}}</dd>
+                                <dt>Vittorie finali</dt>
+                                <dd>{{stat.winFinalTot}}</dd>
 							</dl>
 						</h5>
 					</div>
 					<div class="col-md-5 col-sm-4 col-xs-7 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
-								<dt>Media punti</dt>
+                                <dt>Media punti buy-in</dt>
+                                <dd>{{stat.pointsBuyAvg.toFixed(2)}}</dd>
+								<dt>Media punti tornei</dt>
 								<dd>{{stat.pointsAvg.toFixed(2)}}</dd>
 								<dt>Percentuale vittorie</dt>
 								<dd>{{stat.winPerc.toFixed(2)}}</dd>
@@ -93,12 +97,12 @@
 								<dd>{{stat.moneyAvg.toFixed(2)}}</dd>
 								<!--<dt>Media profitti</dt>
 								<dd>{{stat.moneyProfitAvg.toFixed(2)}}</dd>-->
-								<dt>Quote</dt>
-								<dd>{{stat.payTot}}</dd>
+								<dt>Buy-in</dt>
+								<dd>{{stat.buyTotNoFinal}}</dd>
+                                <dt>Serie headsup vinti</dt>
+                                <dd>{{stat.headsupSeries}}</dd>
 								<dt>Tavoli finali</dt>
 								<dd>{{stat.matchFinalTot}}</dd>
-								<dt>Serie headsup vinti</dt>
-								<dd>{{stat.headsupSeries}}</dd>
 							</dl>
 						</h5>
 					</div>

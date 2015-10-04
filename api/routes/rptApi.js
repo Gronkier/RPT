@@ -12,7 +12,6 @@ var BSON = mongo.BSONPure;
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
 
-
 var jwt = require('jsonwebtoken');
 var tokenSign = '454354356457 vhhegj68888';
 
@@ -289,16 +288,17 @@ exports.getStats = function(req, res) {
 					pointsAvg:{$avg: '$results.points'},
 					moneyTot:{$sum: '$results.money'},
 					moneyAvg:{$avg: '$results.money'},
-					payTot:{$sum: '$results.pay'},
+					buyTot:{$sum: '$results.pay'},
+                    buyTotNoFinal:{$sum:{$cond: [{$eq:['$details.final', 0]}, '$results.pay', 0 ]}},
 					winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
 					winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
-					headsupTot:{$sum: {$cond: [{$or:[{$eq:['$results.pos', 1]},{$eq:['$results.pos', 2]}]}, 1, 0 ]}},
+					headsupTot:{$sum: {$cond: [{$and:[{$or:[{$eq:['$results.pos', 1]},{$eq:['$results.pos', 2]}]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
 					//headsupTrend:{$sum: {$cond: [{$lte:['$results.pos', 2]},
 					//	                  {$cond: [{$eq:['$results.pos', 1]},
 					//					  {$cond: [{$lte:['$headsupTrend', 0]}, -'$headsupTrend' +1, +1 ]},
 					//					  {$cond: [{$gte:['$headsupTrend', 0]}, -'$headsupTrend' -1, -1 ]}
 					//					  ]},0]}},
-					matchTot:{$sum: 1},
+					matchTot:{$sum: {$cond: [{$eq:['$details.final', 0]}, 1, 0 ]}},
 					matchFinalTot:{$sum: {$cond: [{$eq:['$details.final', 1]}, 1, 0 ]}},
 					winSeries:{$sum: 0},
 					winSeriesTemp:{$sum: 0},
@@ -310,8 +310,9 @@ exports.getStats = function(req, res) {
 					pointsTot: 1,
 					matchTot:1,
 					matchFinalTot:1,
-					pointsAvg:{ $divide:["$pointsTot",{ $subtract: [ "$matchTot", "$matchFinalTot" ]}]},
-					winFinalTot: 1,
+					pointsAvg:{ $divide:["$pointsTot","$matchTot"]},
+                    pointsBuyAvg:{ $divide:["$pointsTot","$buyTotNoFinal"]},
+                    winFinalTot: 1,
 					winTot: 1,
 					winPerc : { $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]},
 					headsupTot : 1,
@@ -321,7 +322,8 @@ exports.getStats = function(req, res) {
 					moneyAvg:1,
 					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
 					moneyProfitAvg: { $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]},
-					payTot: 1,
+					buyTot: 1,
+                    buyTotNoFinal:1,
 					winSeries:1,
 					winSeriesTemp:1,
 					headsupSeries:1,
@@ -371,7 +373,8 @@ exports.getStats = function(req, res) {
 exports.getStatTypes = function(req, res) {
 	var statTypes = [
 						{type:'pointsTot', label:'Punti'},
-						{type:'pointsAvg', label:'Media punti'},
+						{type:'pointsAvg', label:'Media punti tornei'},
+                        {type:'pointsBuyAvg', label:'Media punti buy-in'},
 						{type:'winFinalTot', label:'Vittorie finali'},
 						{type:'winTot', label:'Vittorie'},
 						{type:'winPerc', label:'Percentuale vittorie'},
@@ -380,13 +383,13 @@ exports.getStatTypes = function(req, res) {
                         {type:'headsupWinPerc', label:'Perc. vittorie headsup'},
                         {type:'moneyTot', label:'Montepremi'},
 						{type:'moneyAvg', label:'Media montepremi'},
-						{type:'moneyProfit', label:'Profitti'},
-						{type:'moneyProfitAvg', label:'Media profitti'},
+					/*	{type:'moneyProfit', label:'Profitti'},
+						{type:'moneyProfitAvg', label:'Media profitti'},*/
 						{type:'matchTot', label:'Tornei'},
 						{type:'matchFinalTot', label:'Tavoli finali'},
 						{type:'winSeries', label:'Serie vittorie'},
 						{type:'headsupSeries', label:'Serie headsup vinti'},
-						{type:'payTot', label:'Quote'}
+						{type:'buyTotNoFinal', label:'Buy-in'}
 					];
 	res.send(statTypes);
 };
