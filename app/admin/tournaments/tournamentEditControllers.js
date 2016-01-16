@@ -78,8 +78,11 @@ tournamentEditControllers.controller('tournamentEditController', ['$scope', '$lo
                     var player = $scope.editTournament.results[i];
                     player.points = $scope.editTournament.results.length / player.pos * 10 * (1.25+ TotalPay/$scope.editTournament.results.length);
                     player.points = parseFloat(player.points.toFixed(2));
-                    if(i==0){
-                        player.money=TotalPay;
+                    if(i==0) {
+                        player.money = TotalPay - 5;
+                    }
+                    if(i==1){
+                        player.money=5;
                     }
                 }
             }

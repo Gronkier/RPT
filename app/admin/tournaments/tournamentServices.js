@@ -24,6 +24,10 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
             {
                 newId = data[0]._id + 1;
             }
+              else
+            {
+                newId = currentYear*100 + 1;
+            }
             callback(data);
           })
           .error(function(data) {
@@ -60,6 +64,7 @@ serviceTournament.factory('tournamentService', ['$http', '$location', function($
               "_id": newId,
               "year": tournamentDate.getFullYear(),
               "date": tournamentDate.toISOString(),
+              //"date": tournamentDate,
               "details": {
                   "location": "",
                   "tables": 1,
