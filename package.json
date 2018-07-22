@@ -21,7 +21,7 @@
     "morgan": "^1.2.2",
     "serve-favicon": "^2.0.1",
 	"mongodb": "~2.2.35",
-    "mongoose": "^5.0.0",
+    "mongoose": "^5.2.4",
     "express-jwt": "^1.0.0",
     "jsonwebtoken": "^3.2.2"
   },
