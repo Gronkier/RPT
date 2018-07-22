@@ -12,6 +12,8 @@ var BSON = mongo.BSONPure;
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
 
+
+
 var jwt = require('jsonwebtoken');
 var tokenSign = '454354356457 vhhegj68888';
 
@@ -331,7 +333,9 @@ exports.getStats = function(req, res) {
 					}},
 			//{$sort: {sortAction: -1, pointsTot: -1, moneyTot: -1}}
 			sort
-		    ],function(err, results) {
+		    ],{
+            cursor: {}
+        },function(err, results) {
 			//res.json(results);
 			stats = results;
 
@@ -438,7 +442,9 @@ exports.getAllPlayers = function(req, res) {
 			{$sort : {
 				matchTot:-1
 			}}
-		],function(err, results) {
+		],{
+            cursor: {}
+        },function(err, results) {
 
 			var players = [];
 			if(results) {
@@ -482,7 +488,9 @@ exports.getYearRankPlayers = function(req, res) {
 			{$sort : {
 					pointsTot:-1
 					}}
-		    ],function(err, currResults) {
+		    ],{
+            cursor: {}
+        },function(err, currResults) {
 
 
 			var results = currResults;
@@ -516,7 +524,9 @@ exports.getYearRankPlayers = function(req, res) {
 						pointsTot:-1
 					}}
 
-				],function(err, prevResults) {
+				],{
+                    cursor: {}
+                },function(err, prevResults) {
 					if(prevResults) {
 					   for (i = 0; i < prevResults.length; i++) {
 						   prevResults[i].pos = 1;
@@ -607,7 +617,9 @@ exports.getCharts = function(req, res) {
 								pointsTot: -1
 							}
 						}
-					], function (err, results) {
+					],{
+                        cursor: {}
+                    }, function (err, results) {
 						if (results) {
                             var date = results[0].date;
                             for (i = 0; i < results.length; i++) {
