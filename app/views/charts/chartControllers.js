@@ -68,6 +68,7 @@ chartControllers.controller('chartController', ['$scope', 'chartService','common
                 $scope.labels = labels;
                 $scope.series = series;
                 $scope.data = chartData;
+                $scope.options = {legend: {display: true}, elements: {line :{tension : 0.1}}};
 
             });
         };

@@ -6,22 +6,24 @@
 
 // Mongo init
 var mongo = require('mongodb');
-var Server = mongo.Server;
-var Db = mongo.Db;
+/* var Server = mongo.Server;
+var Db = mongo.Db; */
 var BSON = mongo.BSONPure;
 // Mongo Lab URI
 var uri = process.env.CUSTOMCONNSTR_MONGOLAB_URI;
-
-
+//var uri = 'mongodb://MongoLab-52:A_Lw.v09UhRjTy_wkkJv0re8HZj3F6.i.7Wwz57nbFs-@ds045107.mongolab.com:45107/MongoLab-52';
+//var uri = 'mongodb+srv://MongoLab-52:X4g8mrGi10xc7Ong@mongolab-52.u0rrv.azure.mongodb.net/MongoLab-52?retryWrites=true&w=majority';
 
 var jwt = require('jsonwebtoken');
+const { pipeline } = require('stream');
 var tokenSign = '454354356457 vhhegj68888';
 
 var db = null;
 var mongoClient = mongo.MongoClient;
-mongoClient.connect(uri, {}, function(error, database){       
-	console.log("connected, db: " + database);
-	db = database;
+
+mongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}, function(error, client){       
+	console.log("connected, db: " + client.db().databaseName);
+	db = client.db();
 	db.addListener("error", function(error){
 	console.log("Error connecting to MongoLab");
 	});
@@ -155,7 +157,7 @@ exports.updateTournament = function(req, res) {
     console.log('Updating tournament: ' + id);
     console.log(JSON.stringify(tournament));
     db.collection('tournaments', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(id)}, tournament, {safe:true}, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, {$set: tournament}, function(err, result) {
             if (err) {
                 console.log('Error updating tournament: ' + err);
                 res.send({'error':'An error has occurred'});
@@ -219,7 +221,7 @@ exports.saveTournament = function(req, res) {
 			existingTournament=item;
 			if(existingTournament) {
 				db.collection('tournaments', function (err, collection) {
-					collection.update({'_id':parseInt(tournament._id)}, tournament, {safe: true}, function (err, result) {
+					collection.updateOne({'_id':parseInt(tournament._id)}, {$set: tournament}, function (err, result) {
 						if (err) {
 							console.log('Error: ' + err.message);
 							res.send({'error': err.message});
@@ -232,7 +234,7 @@ exports.saveTournament = function(req, res) {
 			}
 			else {
 				db.collection('tournaments', function (err, collection) {
-					collection.insert(tournament, {safe: true}, function (err, result) {
+					collection.insertOne(tournament, function (err, result) {
 						if (err) {
 							console.log('Error: ' + err.message);
 							res.send({'error': err.message});
@@ -253,7 +255,7 @@ exports.deleteTournament = function(req, res) {
 	console.log('Deleting tournament: ' + tournament._id);
 	db.collection('tournaments', function(err, collection) {
 		//collection.remove({'_id':new BSON.ObjectID(tournament._id)}, {safe:true}, function(err, result) {
-		collection.remove({'_id':tournament._id}, {safe:true}, function(err, result) {
+		collection.deleteOne({'_id':parseInt(tournament._id)}, function(err, result) {
 			if (err) {
 				res.send({'error':'An error has occurred - ' + err});
 			} else {
@@ -333,9 +335,7 @@ exports.getStats = function(req, res) {
 					}},
 			//{$sort: {sortAction: -1, pointsTot: -1, moneyTot: -1}}
 			sort
-		    ],{
-            cursor: {}
-        },function(err, results) {
+		    ]).toArray(function(err, results) {
 			//res.json(results);
 			stats = results;
 
@@ -426,37 +426,99 @@ exports.getAllPlayerFiles = function(req, res) {
 	res.json(results);
 };
 
+
+const pplinePlayer = [
+	{$unwind: {
+		path: '$results', 
+		includeArrayIndex: 'index', 
+		preserveNullAndEmptyArrays: false
+	  }},
+	{$group: {
+		_id:'$results.player_id',
+		matchTot:{$sum: 1}
+	}},
+	{$project : {
+		_id: 1,
+		matchTot:1
+	}},
+	{$sort : {
+		matchTot:-1
+	}}
+];
+
 exports.getAllPlayers = function(req, res) {
-
-	db.collection('tournaments', function(err, collection) {
-		collection.aggregate([
-			{$unwind:'$results'},
-			{$group: {
-				_id:'$results.player_id',
-				matchTot:{$sum: 1}
-			}},
-			{$project : {
-				_id: 1,
-				matchTot:1
-			}},
-			{$sort : {
-				matchTot:-1
-			}}
-		],{
-            cursor: {}
-        },function(err, results) {
-
-			var players = [];
-			if(results) {
-				for (i = 0; i < results.length; i++) {
-					players.push(results[i]._id);
+    db.collection('tournaments', function(err, collection) {
+        collection.aggregate(pplinePlayer).toArray(function(err, results) {
+				var players = [];
+				if(results) {
+					for (i = 0; i < results.length; i++) {
+						players.push(results[i]._id);
+					}
 				}
-			}
+				res.json(players);
+			});
+        });
+}; 
 
-			res.json(players);
-		});
-	});
-};
+
+/* const pplineRankPlayer1 = [
+	{$match : {year : parseInt(y)}},
+	{$unwind:'$results'},
+	{$group: {
+			_id:'$results.player_id',
+			pointsTot:{$sum: '$results.points'},
+			winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
+			winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
+			stack:{$sum: 0},
+			pos:{$sum: 0},
+			pointsPrev:{$sum: 0},
+			posPrev:{$sum: 0}
+			}},
+	{$project : {
+			_id: 1,
+			pointsTot: 1,
+			winFinalTot: 1,
+			winTot: 1,
+			stack: 1,
+			pos: 1,
+			pointsPrev: 1,
+			posPrev:1
+			}},
+	{$sort : {
+			pointsTot:-1
+			}}
+	]; */
+
+/* const pplineRankPlayer2 = [
+	{$match : {year : parseInt(y)}},
+	{$sort : { date:-1}},
+	{$skip:1},
+	{$unwind:'$results'},
+	{$group: {
+		_id:'$results.player_id',
+		pointsTot:{$sum: '$results.points'},
+		winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
+		winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
+		stack:{$sum: 0},
+		pos:{$sum: 0},
+		pointsPrev:{$sum: 0},
+		posPrev:{$sum: 0}
+	}},
+	{$project : {
+		_id: 1,
+		pointsTot: 1,
+		winFinalTot: 1,
+		winTot: 1,
+		stack: 1,
+		pos: 1,
+		pointsPrev: 1,
+		posPrev:1
+	}},
+	{$sort : {
+		pointsTot:-1
+	}}
+
+]; */
 
 exports.getYearRankPlayers = function(req, res) {
     var y = req.params.y;	
@@ -464,8 +526,8 @@ exports.getYearRankPlayers = function(req, res) {
     db.collection('tournaments', function(err, collection) {
 		collection.aggregate([
 			{$match : {year : parseInt(y)}},
-		    {$unwind:'$results'},
-		    {$group: {
+			{$unwind:'$results'},
+			{$group: {
 					_id:'$results.player_id',
 					pointsTot:{$sum: '$results.points'},
 					winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
@@ -475,7 +537,7 @@ exports.getYearRankPlayers = function(req, res) {
 					pointsPrev:{$sum: 0},
 					posPrev:{$sum: 0}
 					}},
-		    {$project : {
+			{$project : {
 					_id: 1,
 					pointsTot: 1,
 					winFinalTot: 1,
@@ -488,11 +550,7 @@ exports.getYearRankPlayers = function(req, res) {
 			{$sort : {
 					pointsTot:-1
 					}}
-		    ],{
-            cursor: {}
-        },function(err, currResults) {
-
-
+			]).toArray(function(err, currResults) {
 			var results = currResults;
 			db.collection('tournaments', function(err, collection) {
 				collection.aggregate([
@@ -523,10 +581,8 @@ exports.getYearRankPlayers = function(req, res) {
 					{$sort : {
 						pointsTot:-1
 					}}
-
-				],{
-                    cursor: {}
-                },function(err, prevResults) {
+				
+				]).toArray(function(err, prevResults) {
 					if(prevResults) {
 					   for (i = 0; i < prevResults.length; i++) {
 						   prevResults[i].pos = 1;
@@ -570,6 +626,7 @@ exports.getYearRankPlayers = function(req, res) {
     });
 };
 
+
 exports.savePlayer =  function(req, res) {
 }
 
@@ -584,7 +641,7 @@ exports.getCharts = function(req, res) {
 	var series =[];
 	var y = req.params.y;
 	db.collection('tournaments', function(err, collection) {
-		collection.count({'year': parseInt(y)}, function(err, count) {
+		collection.countDocuments({'year': parseInt(y)}, function(err, count) {
 
 			for (var n = 0; n < count; n++) {
 				(function (clsn) {
@@ -617,9 +674,7 @@ exports.getCharts = function(req, res) {
 								pointsTot: -1
 							}
 						}
-					],{
-                        cursor: {}
-                    }, function (err, results) {
+					]).toArray(function (err, results) {
 						if (results) {
                             var date = results[0].date;
                             for (i = 0; i < results.length; i++) {
@@ -679,7 +734,7 @@ exports.getHeadsups = function(req, res) {
 				{"year":{$gte:parseInt(yFrom)}},
 				{"year":{$lte:parseInt(yTo)}}]
 			}]},
-			{fields:{"results.player_id":1,"results.pos":1}}).toArray(function(err, results) {
+			{projection:{"results.player_id":1,"results.pos":1}}).toArray(function(err, results) {
 			var headsups = [];
 			for (i = 0; i < results.length; i++) {
 				var headsup = {
@@ -737,7 +792,7 @@ exports.login = function(req, res) {
                 };
 
                 // We are sending the profile inside the token
-                var token = jwt.sign(profile, tokenSign, { expiresInMinutes: 60*5 });
+                var token = jwt.sign(profile, tokenSign, { expiresIn: 60*60*5 });
 
                 res.json({ token: token });
             }
