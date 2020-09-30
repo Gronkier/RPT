@@ -11,7 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\server.js"
+            "program": "${workspaceFolder}\\server.js",
+            "env": {"CUSTOMCONNSTR_MONGOLAB_URI":"mongodb+srv://MongoLab-52:X4g8mrGi10xc7Ong@mongolab-52.u0rrv.azure.mongodb.net/MongoLab-52?retryWrites=true&w=majority", "PORT":"3003"}
         }
     ]
 }
