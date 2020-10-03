@@ -315,18 +315,18 @@ exports.getStats = function(req, res) {
 					pointsTot: 1,
 					matchTot:1,
 					matchFinalTot:1,
-					pointsAvg:{ $divide:["$pointsTot","$matchTot"]},
-                    pointsBuyAvg:{ $divide:["$pointsTot","$buyTotNoFinal"]},
+					pointsAvg:{$cond:[{$eq:['$matchTot', 0]},0,{ $divide:["$pointsTot","$matchTot"]}]},
+                    pointsBuyAvg:{$cond:[{$eq:['$buyTotNoFinal', 0]},0,{ $divide:["$pointsTot","$buyTotNoFinal"]}]},
                     winFinalTot: 1,
 					winTot: 1,
-					winPerc : { $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]},
+					winPerc :   {$cond:[{$eq:['$matchTot', 0]},0,{ $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]}]},
 					headsupTot : 1,
-                    headsupPerc : { $multiply: [{ $divide:[ "$headsupTot", "$matchTot" ]},100]},
+                    headsupPerc : {$cond:[{$eq:['$matchTot', 0]},0,{ $multiply: [{ $divide:[ "$headsupTot", "$matchTot" ]},100]}]},
                     headsupWinPerc : {$cond: [ {$gt:['$headsupTot', 0]}, { $multiply: [{ $divide:[ "$winTot", "$headsupTot" ]},100]}, 0 ]},
 					moneyTot: 1,
 					moneyAvg:1,
 					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
-					moneyProfitAvg: { $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]},
+					moneyProfitAvg: {$cond:[{$eq:['$payTot', 0]},0,{ $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]}]},
 					buyTot: 1,
                     buyTotNoFinal:1,
 					winSeries:1,
@@ -371,19 +371,22 @@ exports.getStats = function(req, res) {
 				  ]).toArray(function(err, results) {
 					//res.json(results);
 					seasonWins = results;
-					for (i = 0; i < seasonWins.length; i++) {
-						for (p = 0; p < stats.length; p++) {
-							if(seasonWins[i]._id == stats[p]._id)
-							{
-								stats[p].seasonWins = seasonWins[i].seasonWins
-								break;
+					if(seasonWins != 0 && stats != null)
+					{
+						for (i = 0; i < seasonWins.length; i++) {
+							for (p = 0; p < stats.length; p++) {
+								if(seasonWins[i]._id == stats[p]._id)
+								{
+									stats[p].seasonWins = seasonWins[i].seasonWins
+									break;
+								}
 							}
 						}
 					}
 
 					db.collection('tournaments', function(err, collection) {
 						collection.aggregate([
-							{$match : {"details.final":1}},
+							{$match : {$and:[{"details.final":1}, {year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}]}},
 							{$unwind:'$results'},
 							{$match : {"results.pos":1}},
 							{$sort: {'year':-1}},
@@ -393,39 +396,44 @@ exports.getStats = function(req, res) {
 						]).toArray(function(err, results) {
 							//res.json(results);
 							finalWins = results;
-							for (i = 0; i < finalWins.length; i++) {
-								for (p = 0; p < stats.length; p++) {
-									if(finalWins[i]._id == stats[p]._id)
-									{
-										stats[p].finalWins = finalWins[i].finalWins
-										break;
+							if(finalWins != 0 && stats != null)
+							{
+								for (i = 0; i < finalWins.length; i++) {
+									for (p = 0; p < stats.length; p++) {
+										if(finalWins[i]._id == stats[p]._id)
+										{
+											stats[p].finalWins = finalWins[i].finalWins
+											break;
+										}
 									}
 								}
 							}
 
 			db.collection('tournaments', function(err, collection) {
 				collection.find({year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}).sort( { date: -1 } ).toArray(function(err, items) {
-
-					for (i = 0; i < items.length; i++) {
-						for (p = 0; p < items[i].results.length; p++) {
-							for (j = 0; j < stats.length; j++) {
-								if (stats[j]._id == items[i].results[p].player_id) {
-									playerPresent = true;
-									if(p==0){
-										stats[j].winSeriesTemp++;
-										stats[j].headsupSeriesTemp++;
-										if(stats[j].winSeriesTemp>stats[j].winSeries)
-											stats[j].winSeries=stats[j].winSeriesTemp;
-										if(stats[j].headsupSeriesTemp>stats[j].headsupSeries)
-											stats[j].headsupSeries=stats[j].headsupSeriesTemp;
-									}
-									else {
-										if(p==1){
-											stats[j].headsupSeriesTemp=0;
+					if(stats != null)
+					{
+						for (i = 0; i < items.length; i++) {
+							for (p = 0; p < items[i].results.length; p++) {
+								for (j = 0; j < stats.length; j++) {
+									if (stats[j]._id == items[i].results[p].player_id) {
+										playerPresent = true;
+										if(p==0){
+											stats[j].winSeriesTemp++;
+											stats[j].headsupSeriesTemp++;
+											if(stats[j].winSeriesTemp>stats[j].winSeries)
+												stats[j].winSeries=stats[j].winSeriesTemp;
+											if(stats[j].headsupSeriesTemp>stats[j].headsupSeries)
+												stats[j].headsupSeries=stats[j].headsupSeriesTemp;
 										}
-										stats[j].winSeriesTemp=0;
+										else {
+											if(p==1){
+												stats[j].headsupSeriesTemp=0;
+											}
+											stats[j].winSeriesTemp=0;
+										}
+										break;
 									}
-									break;
 								}
 							}
 						}
