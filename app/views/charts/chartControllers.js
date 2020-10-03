@@ -1,6 +1,7 @@
 'use strict';
 
 var chartControllers = angular.module('chartControllers', ['chart.js']);
+Chart.defaults.global.colors = ['#00E676', '#EF6C00', '#03A9F4', '#FFEA00', '#E91E63', '#009688', '#E53935', '#7B1FA2'];
 
 chartControllers.controller('chartController', ['$scope', 'chartService','commonService',
     function($scope, chartService, commonService) {
@@ -29,7 +30,7 @@ chartControllers.controller('chartController', ['$scope', 'chartService','common
                     //get players
                     var dataRow;
                     for (i = 0; i < data[data.length-1].length; i++) {
-                        if(i>6)
+                        if(i>7)
                             break;
                         series.push(data[data.length-1][i]._id);
                         dataRow = new Array(data.length-1);
@@ -68,7 +69,7 @@ chartControllers.controller('chartController', ['$scope', 'chartService','common
                 $scope.labels = labels;
                 $scope.series = series;
                 $scope.data = chartData;
-                $scope.options = {legend: {display: true}, elements: {line :{tension : 0.1}}};
+                $scope.options = {legend: {display: true}, elements: {line :{tension : 0.1, fill:false}}};
 
             });
         };
