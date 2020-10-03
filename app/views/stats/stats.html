@@ -48,10 +48,31 @@
 						<div class="thumbnail width100" href="#/players/{{stat._id}}">
 							<span class="label label-info">{{getSelectedLabel()}} {{getSelectedValue(stat)}}</span>
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
-							<a ng-repeat="i in getNumber(stat.winFinalTot) track by $index"><i class="fa fa-trophy gold"></i></a>
 							<a ng-repeat="i in getNumberGold(stat.winTot) track by $index"><i class="fa fa-star gold"></i></a>
 							<a ng-repeat="i in getNumberSilver(stat.winTot) track by $index"><i class="fa fa-star silver"></i></a>
 							<a ng-repeat="i in getNumberBronze(stat.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
+							<span class="label label-info" ng-hide="{{stat.seasonWins==0}}">Vittorie stagioni</span>
+							<div ng-repeat="seasonWin in stat.seasonWins">
+								<div class="row">
+									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+										<i class="fa fa-shield gold"></i></a>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+										{{seasonWin.year}}
+									</div>
+								</div>
+							</div>
+							<span class="label label-info" ng-hide="{{stat.finalWins==0}}">Vittorie finali</span>
+							<div ng-repeat="finalWin in stat.finalWins">
+								<div class="row">
+									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+										<i class="fa fa-trophy gold"></i></a>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+										{{finalWin.year}}
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-md-5 col-sm-4 col-xs-5 no-margin">
@@ -65,8 +86,8 @@
 								<dd>{{stat.winTot}}</dd>
 								<dt>HeadsUp</dt>
 								<dd>{{stat.headsupTot}}</dd>
-                                <dt>&nbsp</dt>
-                                <dd>&nbsp</dd>
+                                <dt>Buy-in</dt>
+								<dd>{{stat.buyTotNoFinal}}</dd>
 								<dt>Montepremi</dt>
 								<dd>{{stat.moneyTot}}</dd>
 								<!--<dt>Profitti</dt>
@@ -75,8 +96,6 @@
 								<dd>{{stat.matchTot}}</dd>
 								<dt>Serie vittorie</dt>
 								<dd>{{stat.winSeries}}</dd>
-                                <dt>Vittorie finali</dt>
-                                <dd>{{stat.winFinalTot}}</dd>
 							</dl>
 						</h5>
 					</div>
@@ -97,12 +116,11 @@
 								<dd>{{stat.moneyAvg.toFixed(2)}}</dd>
 								<!--<dt>Media profitti</dt>
 								<dd>{{stat.moneyProfitAvg.toFixed(2)}}</dd>-->
-								<dt>Buy-in</dt>
-								<dd>{{stat.buyTotNoFinal}}</dd>
-                                <dt>Serie headsup vinti</dt>
-                                <dd>{{stat.headsupSeries}}</dd>
 								<dt>Tavoli finali</dt>
 								<dd>{{stat.matchFinalTot}}</dd>
+                                <dt>Serie headsup vinti</dt>
+                                <dd>{{stat.headsupSeries}}</dd>
+								
 							</dl>
 						</h5>
 					</div>

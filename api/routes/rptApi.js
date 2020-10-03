@@ -273,7 +273,184 @@ exports.deleteTournament = function(req, res) {
 
 
 
+
+
 exports.getStats = function(req, res) {
+	var stats;
+	var seasonWins;
+	var finalWins;
+	var yFrom = req.params.yFrom;
+	var yTo = req.params.yTo;
+	var type = req.params.type;		
+	var sort = { $sort : {} };
+		sort.$sort[type] = -1;
+
+		//console.log('Retrieving stats: ' + yFrom + ' - ' +yTo);
+    db.collection('tournaments', function(err, collection) {
+		collection.aggregate([
+			{$match : {year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}},
+		    {$unwind:'$results'},
+		    {$group: { 
+					_id:'$results.player_id',
+					pointsTot:{$sum: '$results.points'},
+					pointsAvg:{$avg: '$results.points'},
+					moneyTot:{$sum: '$results.money'},
+					moneyAvg:{$avg: '$results.money'},
+					buyTot:{$sum: '$results.pay'},
+                    buyTotNoFinal:{$sum:{$cond: [{$eq:['$details.final', 0]}, '$results.pay', 0 ]}},
+					winFinalTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 1]}]}, 1, 0 ]}},
+					winTot:{$sum: {$cond: [{$and:[{$eq:['$results.pos', 1]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
+					headsupTot:{$sum: {$cond: [{$and:[{$or:[{$eq:['$results.pos', 1]},{$eq:['$results.pos', 2]}]},{$eq:['$details.final', 0]}]}, 1, 0 ]}},
+					matchTot:{$sum: {$cond: [{$eq:['$details.final', 0]}, 1, 0 ]}},
+					matchFinalTot:{$sum: {$cond: [{$eq:['$details.final', 1]}, 1, 0 ]}},
+					winSeries:{$sum: 0},
+					winSeriesTemp:{$sum: 0},
+					headsupSeries:{$sum: 0},
+					headsupSeriesTemp:{$sum: 0},
+					seasonWins: {$sum: 0},
+					finalWins:{$sum: 0}
+					}},
+		    {$project : {
+					_id: 1, 
+					pointsTot: 1,
+					matchTot:1,
+					matchFinalTot:1,
+					pointsAvg:{ $divide:["$pointsTot","$matchTot"]},
+                    pointsBuyAvg:{ $divide:["$pointsTot","$buyTotNoFinal"]},
+                    winFinalTot: 1,
+					winTot: 1,
+					winPerc : { $multiply: [{ $divide:[ "$winTot", "$matchTot" ]},100]},
+					headsupTot : 1,
+                    headsupPerc : { $multiply: [{ $divide:[ "$headsupTot", "$matchTot" ]},100]},
+                    headsupWinPerc : {$cond: [ {$gt:['$headsupTot', 0]}, { $multiply: [{ $divide:[ "$winTot", "$headsupTot" ]},100]}, 0 ]},
+					moneyTot: 1,
+					moneyAvg:1,
+					moneyProfit : { $subtract: [ "$moneyTot", "$payTot" ]},
+					moneyProfitAvg: { $divide:[ { $subtract: [ "$moneyTot", "$payTot" ]}, "$matchTot" ]},
+					buyTot: 1,
+                    buyTotNoFinal:1,
+					winSeries:1,
+					winSeriesTemp:1,
+					headsupSeries:1,
+					headsupSeriesTemp:1,
+					seasonWins:1,
+					finalWins:1
+					}},
+			//{$sort: {sortAction: -1, pointsTot: -1, moneyTot: -1}}
+			sort
+		    ]).toArray(function(err, results) {
+			//res.json(results);
+			stats = results;
+			
+			db.collection('tournaments', function(err, collection) {
+				collection.aggregate([
+					{$match : {year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}},
+					{$unwind:'$results'},
+			 		{$group: { 
+						_id:{player:'$results.player_id',year:'$year'},
+						pointsTot:{$sum: '$results.points'},
+					 	lastDate : {$max: '$date'}}}, 
+					{$sort: {'_id.year':-1, 'pointsTot':-1}}, 
+					{$group: {
+						_id: '$_id.year',
+						player:{$first:'$_id.player'} ,
+						year:{$first:'$_id.year'} ,
+						point: {$max: '$pointsTot'},
+						lastDate : {$max: '$lastDate'}}}, 
+					{$project: {
+						_id:1,
+						player:1,
+						year:1,
+						point:1,
+						lastWeek : { $isoWeek: { date: '$lastDate' } }}}, 
+					{$match: {$and: [{lastWeek: {$gte: 50, $lt: 53}}]}}, 
+					{$group: {
+						_id: '$player', 
+						seasonWins: {$push: {year: '$year', point: '$point'}}}}
+				  ]).toArray(function(err, results) {
+					//res.json(results);
+					seasonWins = results;
+					for (i = 0; i < seasonWins.length; i++) {
+						for (p = 0; p < stats.length; p++) {
+							if(seasonWins[i]._id == stats[p]._id)
+							{
+								stats[p].seasonWins = seasonWins[i].seasonWins
+								break;
+							}
+						}
+					}
+
+					db.collection('tournaments', function(err, collection) {
+						collection.aggregate([
+							{$match : {"details.final":1}},
+							{$unwind:'$results'},
+							{$match : {"results.pos":1}},
+							{$group: {
+								_id:'$results.player_id',
+								finalWins:{$push: {year: '$year', pos: '$results.pos'}}}}
+						]).toArray(function(err, results) {
+							//res.json(results);
+							finalWins = results;
+							for (i = 0; i < finalWins.length; i++) {
+								for (p = 0; p < stats.length; p++) {
+									if(finalWins[i]._id == stats[p]._id)
+									{
+										stats[p].finalWins = finalWins[i].finalWins
+										break;
+									}
+								}
+							}
+
+			db.collection('tournaments', function(err, collection) {
+				collection.find({year : {$gte: parseInt(yFrom), $lte : parseInt(yTo) }}).sort( { date: -1 } ).toArray(function(err, items) {
+
+					for (i = 0; i < items.length; i++) {
+						for (p = 0; p < items[i].results.length; p++) {
+							for (j = 0; j < stats.length; j++) {
+								if (stats[j]._id == items[i].results[p].player_id) {
+									playerPresent = true;
+									if(p==0){
+										stats[j].winSeriesTemp++;
+										stats[j].headsupSeriesTemp++;
+										if(stats[j].winSeriesTemp>stats[j].winSeries)
+											stats[j].winSeries=stats[j].winSeriesTemp;
+										if(stats[j].headsupSeriesTemp>stats[j].headsupSeries)
+											stats[j].headsupSeries=stats[j].headsupSeriesTemp;
+									}
+									else {
+										if(p==1){
+											stats[j].headsupSeriesTemp=0;
+										}
+										stats[j].winSeriesTemp=0;
+									}
+									break;
+								}
+							}
+						}
+					}
+					res.json(stats);
+				});
+			});
+
+		});
+
+		});
+
+		});		  
+
+        });
+	});
+});
+};
+
+
+
+
+
+
+
+
+exports.getStats2 = function(req, res) {
     var stats;
 	var yFrom = req.params.yFrom;
 	var yTo = req.params.yTo;
