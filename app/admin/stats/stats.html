@@ -43,39 +43,51 @@
 						</h4>
 					</div>
 				</div>
+
 				<div class="row">
-					<div class="col-md-1 col-sm-1 col-xs-12 no-margin">
-						<div class="thumbnail width100" href="#/players/{{stat._id}}">
+					<div class="col-md-4 col-sm-4 col-xs-4">
+						<div class="thumbnail" href="#/players/{{stat._id}}">
 							<span class="label label-info">{{getSelectedLabel()}} {{getSelectedValue(stat)}}</span>
 							<img class="width100" ng-src="resources/players/{{stat._id}}.jpg">
 							<a ng-repeat="i in getNumberGold(stat.winTot) track by $index"><i class="fa fa-star gold"></i></a>
 							<a ng-repeat="i in getNumberSilver(stat.winTot) track by $index"><i class="fa fa-star silver"></i></a>
 							<a ng-repeat="i in getNumberBronze(stat.winTot) track by $index"><i class="fa fa-star bronze"></i></a>
-							<span class="label label-info" ng-hide="{{stat.seasonWins==0}}">Vittorie stagioni</span>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-4">
+						<div class="thumbnail" href="#/players/{{stat._id}}" ng-hide="{{stat.seasonWins==0}}">
+							<span class="label label-info" >Vittorie stagioni</span>
 							<div ng-repeat="seasonWin in stat.seasonWins">
 								<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+									<div class="col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-3 col-xs-offset-1">
 										<i class="fa fa-shield gold"></i></a>
 									</div>
-									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+									<div class="col-md-3 col-sm-3 col-xs-3">
 										{{seasonWin.year}}
 									</div>
 								</div>
 							</div>
-							<span class="label label-info" ng-hide="{{stat.finalWins==0}}">Vittorie finali</span>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-4">
+						<div class="thumbnail" href="#/players/{{stat._id}}" ng-hide="{{stat.finalWins==0}}">
+							<span class="label label-info" >Vittorie finali</span>
 							<div ng-repeat="finalWin in stat.finalWins">
 								<div class="row">
-									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+									<div class="col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-3 col-xs-offset-1">
 										<i class="fa fa-trophy gold"></i></a>
 									</div>
-									<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
+									<div class="col-md-3 col-sm-3 col-xs-3">
 										{{finalWin.year}}
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-5 col-sm-4 col-xs-5 no-margin">
+				</div>
+
+				<div class="row">
+					<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
 								<dt>Punti</dt>
@@ -99,7 +111,7 @@
 							</dl>
 						</h5>
 					</div>
-					<div class="col-md-5 col-sm-4 col-xs-7 no-margin">
+					<div class="col-md-6 col-sm-6 col-xs-6 no-margin">
 						<h5>
 							<dl class="dl-horizontal no-margin">
                                 <dt>Media punti buy-in</dt>

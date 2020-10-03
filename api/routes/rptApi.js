@@ -364,9 +364,10 @@ exports.getStats = function(req, res) {
 						point:1,
 						lastWeek : { $isoWeek: { date: '$lastDate' } }}}, 
 					{$match: {$and: [{lastWeek: {$gte: 50, $lt: 53}}]}}, 
+					{$sort: {'year':-1}},
 					{$group: {
 						_id: '$player', 
-						seasonWins: {$push: {year: '$year', point: '$point'}}}}
+						seasonWins: {$push: {year: '$year', point: '$point'}}}}					 
 				  ]).toArray(function(err, results) {
 					//res.json(results);
 					seasonWins = results;
@@ -385,9 +386,10 @@ exports.getStats = function(req, res) {
 							{$match : {"details.final":1}},
 							{$unwind:'$results'},
 							{$match : {"results.pos":1}},
+							{$sort: {'year':-1}},
 							{$group: {
 								_id:'$results.player_id',
-								finalWins:{$push: {year: '$year', pos: '$results.pos'}}}}
+								finalWins:{$push: {year: '$year', pos: '$results.pos'}}}}							
 						]).toArray(function(err, results) {
 							//res.json(results);
 							finalWins = results;
