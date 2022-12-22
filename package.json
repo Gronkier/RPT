@@ -22,7 +22,7 @@
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.7",
     "express-jwt": "^5.3.3",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^9.0.0"
   },
   "scripts": {
     "postinstall": "bower install",
